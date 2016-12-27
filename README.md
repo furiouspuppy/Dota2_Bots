@@ -1,6 +1,6 @@
 ##My Dota2 Bots
 
-With 7.00 came a long awaited supported AI for writing our own bots, I play a LOT of bot games with friends so I couldn't resist taking a crack at it.
+With 7.00 came a long awaited supported AI for writing our own bots, I play a LOT of bot games with friends so I couldn't resist taking a crack at it.  Gives me an excuse to learn LUA as well.
 
 ##Current Bots Under Development
 Meepo - playable/rough - Laning is pretty much default for 1 clone and the rest jungle/steal runes/over commit.  TODO's Fights,Skill decisions,more efficient rune/jungle,escape
