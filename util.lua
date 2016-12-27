@@ -232,57 +232,6 @@ end
 
 ----------------------------------------------------------------------------------------------------
 
---[[function X.GetSimpleCamps( nTeam, maxCampType )
-    local camps = {}
-    if( nTeam == 2) then --radiant
-        table.insert(camps, RAD_SAFE_EASY)
-        table.insert(camps, RAD_OFF_EASY)
-        if largestCampType == CAMP_EASY then 
-            return camps
-        end   
-            table.insert(camps, RAD_OFF_MEDIUM)
-            table.insert(camps, RAD_MID_MEDIUM)
-            table.insert(camps, RAD_SAFE_MEDIUM)
-        if largestCampType == CAMP_MEDIUM then 
-            return camps
-        end   
-            table.insert(camps, RAD_SAFE_HARD)
-            table.insert(camps, RAD_MID_HARD)
-            table.insert(camps, RAD_OFF_HARD)
-        if largestCampType == CAMP_HARD then 
-            return camps
-        end   
-
-        table.insert(camps, RAD_OFF_ANCIENT)
-        table.insert(camps, RAD_MID_ANCIENT)
-        return camps
-    else -- dire
-        table.insert(camps, DIRE_SAFE_EASY)
-        table.insert(camps, DIRE_OFF_EASY)
-        if largestCampType == CAMP_EASY then 
-            return camps
-        end   
-            table.insert(camps, DIRE_OFF_MEDIUM)
-            table.insert(camps, DIRE_MID_MEDIUM)
-            table.insert(camps, DIRE_SAFE_MEDIUM)
-        if largestCampType == CAMP_MEDIUM then 
-            return camps
-        end   
-            table.insert(camps, DIRE_SAFE_HARD)
-            table.insert(camps, DIRE_MID_HARD)
-            table.insert(camps, DIRE_OFF_HARD)
-        if largestCampType == CAMP_HARD then 
-            return camps
-        end   
-
-        table.insert(camps, DIRE_OFF_ANCIENT)
-        table.insert(camps, DIRE_MID_ANCIENT)
-        return camps
-    end
-end]]
-
-----------------------------------------------------------------------------------------------------
-
 function compare(a,b)
   return a[1] < b[1]
 end

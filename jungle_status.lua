@@ -6,6 +6,7 @@ local isJungleFresh = true
 local jungle = utils.deepcopy(utils.tableNeutralCamps)
 ----------------------------------------------------------------------------------------------------
 
+--reset the jungle camps
 function NewJungle ()
 	if not isJungleFresh then
 		jungle = utils.deepcopy(utils.tableNeutralCamps)
@@ -15,6 +16,7 @@ end
 
 ----------------------------------------------------------------------------------------------------
 
+--get currently known alive / unknown camps
 function GetJungle ( nTeam )
 	if jungle[nTeam] == nil or #jungle[nTeam] == 0 then
 		return nil
@@ -24,6 +26,7 @@ end
 
 ----------------------------------------------------------------------------------------------------
 
+--announce a camp dead
 function JungleCampClear ( nTeam, vector )
   	for i=#jungle[nTeam],1,-1 do
 

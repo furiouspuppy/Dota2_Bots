@@ -9,6 +9,7 @@ min = 0
 sec = 0
 ----------------------------------------------------------------------------------------------------
 
+--mess should keep courier clear?
 function CourierUsageThink()
 	local npcBot = GetBot();
 	if (IsCourierAvailable() and 
@@ -28,6 +29,7 @@ function AbilityUsageThink()
 	local npcBot = GetBot();
 	min = math.floor(DotaTime() / 60)
 	sec = DotaTime() % 60
+
 	--Know Thyself
 	if (#tableMeepos == 1 and utils.GetHeroLevel() > 2) or
 		(#tableMeepos == 2 and utils.GetHeroLevel() > 9) or
@@ -77,7 +79,6 @@ function AbilityUsageThink()
 			desiredSkill = 3;
 	end
 
-	--print("desires".. castNetDesire .. castPoofDesire);
 	if highestDesire == 0 then return;
     elseif desiredSkill == 1 then 
 		npcBot:Action_UseAbilityOnLocation( abilityNet, castNetTarget );

@@ -17,7 +17,6 @@ local team = GetTeam()
 local level = utils.GetHeroLevel()
 local clone = -1
 jungle_status.NewJungle()
---local camps = utils.cloneTable(utils.tableNeutrals["tableNeutralCamps"][GetTeam()])
 local campToFarm = nil
 local campToStack = nil
 local rune
