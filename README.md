@@ -32,7 +32,8 @@ The hero_selection-mode.lua files are in the folder.  You must rename the desire
 Otherwise just add a bot I support to your favorite hero select file and away you go.
 
 ##Important Info
-I am playing within the default modes that we have the option of overwriting for now.  This has it's limitations and my bots still fall victim to the decision making of the default bot code quite often.  Pretty sure Meepo things he's Sterling Archer... only there are 5 of him...
+I am playing within the default modes that we have the option of overwriting for now.  This has it's limitations and my bots still fall victim to the decision making of the default bot code quite often.  Pretty sure Meepo thinks he's Sterling Archer... only there are 5 of him...  Oh and occasionally 1 clone will buy in by himself without meepo prime or his fellow clones!  Guess the devs hadn't thought about Meepo yet in the default bot code.
+
 Also, I have using some _generic files.  This also has side effects.  I have modes for rune/ward/item disabled so bots should no longer get stuck in jungles or rosh pits however they will also never ward, pick up runes (aegis?) etc.
 The big one other bot coders might need to watch out for is that I override item_purchase_generic.lua and have it setup where there is a builds folder with files for every bot.  If a bot isn't implemented yet it will just have "NOT IMPLEMENTED" in that file.  THAT IS IMPORTANT and the game may crash without that.  It also means every unit will try and call it, so be prepared for death wards, necronomicons etc. to generate console errors of the 'missing file' kind.  This will not affect game play that i've ever seen.
 
