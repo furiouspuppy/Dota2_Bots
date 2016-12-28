@@ -14,11 +14,14 @@ Item Purchase - Set up for easily adding a new bot with just an item/skill build
 
 Utilities - Ya know... Stuff!
 
-##Playing with bots
+##How To Install
 
-Copy the files into the dota installation under a folder 'vscripts/bots' that does not exist by default.  You will know you are in the right place when there is a bots_example folder.
-i.e. C:\Program Files (x86)\Steam\steamapps\common\dota 2 beta\game\dota\scripts\vscripts\bots
-Once you have the files in the right location you should be able to create a lobby in Dota2 and if you edit the settings under bot settings you need to set both teams bots to local dev script an select the game mode of choice.  Currently I have hero_selection.lua files for
+1. [Download](https://github.com/furiouspuppy/Dota2_Bots/archive/master.zip) the latest version
+2. Unzip and rename the folder to **"bots"**
+3. Move it to **"C:\Program Files (x86)\Steam\steamapps\common\dota 2 beta\game\dota\scripts\vscripts\**"
+4. In the bots folder, rename one of the hero_selection-****.lua to hero_selection.lua 
+
+Available hero_selections:
 
 1v1 solo mid with just bots
 
@@ -27,9 +30,6 @@ Once you have the files in the right location you should be able to create a lob
 5v5 all pick with a player at radiant top slot (position 1)
 
 5v5 all pick with 2 players in radiant slot 1 and 2
-
-The hero_selection-mode.lua files are in the folder.  You must rename the desired file to hero_selection.lua!
-Otherwise just add a bot I support to your favorite hero select file and away you go.
 
 ##Important Info
 I am playing within the default modes that we have the option of overwriting for now.  This has it's limitations and my bots still fall victim to the decision making of the default bot code quite often.  Pretty sure Meepo thinks he's Sterling Archer... only there are 5 of him...  Oh and occasionally 1 clone will buy in by himself without meepo prime or his fellow clones!  Guess the devs hadn't thought about Meepo yet in the default bot code.
