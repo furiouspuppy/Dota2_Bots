@@ -22,6 +22,7 @@ Utilities - Ya know... Stuff!
 4. In the bots folder, rename one of the hero_selection-****.lua to hero_selection.lua 
 5. Start dota -> Create Lobby -> Click Edit in lobby settings
 6. Server Location: Local Host, Bot Settings/Radient Bots and Dire Bots: Local Dev Script
+7. Players must always occupy the first slots of Radiant team with current hero_selection.lua files
 
 Available hero_selections:
 
@@ -34,7 +35,7 @@ Available hero_selections:
 5v5 all pick with 2 players in radiant slot 1 and 2
 
 ##Important Info
-I am playing within the default modes that we have the option of overwriting for now.  This has it's limitations and my bots still fall victim to the decision making of the default bot code quite often.  Pretty sure Meepo thinks he's Sterling Archer... only there are 5 of him...  Oh and occasionally 1 clone will buy in by himself without meepo prime or his fellow clones!  Guess the devs hadn't thought about Meepo yet in the default bot code.
+I am playing within the default modes that we have the option of overwriting for now.  This has it's limitations and my bots still fall victim to the decision making of the default bot code quite often.  Pretty sure Meepo thinks he's Sterling Archer... only there are 5 of him... 
 
 Also, I have using some _generic files.  This also has side effects.  I have modes for rune/ward/item disabled so bots should no longer get stuck in jungles or rosh pits however they will also never ward, pick up runes (aegis?) etc.
 The big one other bot coders might need to watch out for is that I override item_purchase_generic.lua and have it setup where there is a builds folder with files for every bot.  If a bot isn't implemented yet it will just have "NOT IMPLEMENTED" in that file.  THAT IS IMPORTANT and the game may crash without that.  It also means every unit will try and call it, so be prepared for death wards, necronomicons etc. to generate console errors of the 'missing file' kind.  This will not affect game play that i've ever seen.
