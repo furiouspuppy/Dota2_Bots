@@ -304,3 +304,16 @@ function performBlinkInit( castBlinkInitTarget )
 		npcBot:Action_UseAbilityOnLocation( itemBlink, castBlinkInitTarget);
 	end
 end
+
+----------------------------------------------------------------------------------------------------
+
+-- attempt to disable buybacks for clones to prevent a clone buying in alone
+if DotaTime() < 0 then
+	
+	--print("I would still like buy in permission plz")
+	return
+end
+
+function  BuybackUsageThink()
+	--print("Clones shouldn't cheat")
+end
