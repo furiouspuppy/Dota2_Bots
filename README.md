@@ -20,6 +20,8 @@ Utilities - Ya know... Stuff!
 2. Unzip and rename the folder to **"bots"**
 3. Move it to **"C:\Program Files (x86)\Steam\steamapps\common\dota 2 beta\game\dota\scripts\vscripts\**"
 4. In the bots folder, rename one of the hero_selection-****.lua to hero_selection.lua 
+5. Start dota -> Create Lobby -> Click Edit in lobby settings
+6. Server Location: Local Host, Bot Settings/Radient Bots and Dire Bots: Local Dev Script
 
 Available hero_selections:
 
