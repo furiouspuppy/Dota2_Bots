@@ -7,6 +7,8 @@ Meepo - playable/rough - Laning is pretty much default for 1 clone and the rest 
 
 Puck - playable/rough - TODO's Orb Tracking for jaunt
 
+Clockwerk - rough - TODO's need fight awareness and much skill work
+
 ##Current General Modes Under Development
 Jungling - Team wide jungle camp tracking, easy to use vectors
 
