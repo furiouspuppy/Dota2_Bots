@@ -239,6 +239,18 @@ for i=0, 15 do
             table.insert(currentItems, "item_blade_of_alacrity")
             table.insert(currentItems, "item_boots_of_elves")
             table.insert(currentItems, "item_recipe_yasha")
+        elseif(_item == "item_hood_of_defiance")then
+            table.insert(currentItems, "item_ring_of_health")
+            table.insert(currentItems, "item_cloak")
+            table.insert(currentItems, "item_ring_of_regen")
+        elseif(_item == "item_phase_boots")then
+            table.insert(currentItems, "item_boots")
+            table.insert(currentItems, "item_blades_of_attack")
+            table.insert(currentItems, "item_blades_of_attack")
+        elseif(_item == "item_vanguard")then
+            table.insert(currentItems, "item_stout_shield")
+            table.insert(currentItems, "item_ring_of_health")
+            table.insert(currentItems, "item_vitality_booster")
         else
             table.insert(currentItems, npcBot:GetItemInSlot(i):GetName())
         end

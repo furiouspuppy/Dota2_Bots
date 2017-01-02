@@ -24,17 +24,12 @@ Utilities - Ya know... Stuff!
 4. In the bots folder, rename one of the hero_selection-****.lua to hero_selection.lua 
 5. Start dota -> Create Lobby -> Click Edit in lobby settings
 6. Server Location: Local Host, Bot Settings/Radient Bots and Dire Bots: Local Dev Script
-7. Players must always occupy the first slots of Radiant team with current hero_selection.lua files
 
 Available hero_selections:
 
-1v1 solo mid with just bots
+hero_selection1 = 1v1 solo mid with just bots
 
-5v5 all pick with just bots
-
-5v5 all pick with a player at radiant top slot (position 1)
-
-5v5 all pick with 2 players in radiant slot 1 and 2
+hero_selection5 = 5v5 all pick tested with all bots or 1-2 players but should work for any # of players
 
 ##Important Info
 I am playing within the default modes that we have the option of overwriting for now.  This has it's limitations and my bots still fall victim to the decision making of the default bot code quite often.  Pretty sure Meepo thinks he's Sterling Archer... only there are 5 of him... 

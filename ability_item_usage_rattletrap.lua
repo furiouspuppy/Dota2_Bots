@@ -8,7 +8,7 @@ local inspect = require(GetScriptDirectory() .. "/inspect")
 --rattletrap_power_cogs
 --rattletrap_rocket_flare
 
-
+--[[
 	local us = GetTeamPlayers( GetTeam() )
 	local them
 	if math.abs(GetTeam() - 3) then
@@ -24,6 +24,7 @@ local inspect = require(GetScriptDirectory() .. "/inspect")
 
 	local test = GetBot():GetNearbyHeroes( 35000, true, BOT_MODE_NONE )
 	print(assert(inspect.inspect(test)))
+	]]
 castbaDesire = 0;
 castcogsDesire = 0;
 casthookDesire = 0;
@@ -350,8 +351,12 @@ function ConsiderCogs()
 					return BOT_ACTION_DESIRE_MODERATE
 				end
 			end
+
 		end
 	end
+
+	--if in a team fight
+
 
 	--if enemy is under our tower
 	local tableNearbyEnemyHeroes = npcBot:GetNearbyHeroes( 1300, true, BOT_MODE_NONE );
