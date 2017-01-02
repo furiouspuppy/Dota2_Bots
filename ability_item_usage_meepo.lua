@@ -1,7 +1,8 @@
 local utils = require(GetScriptDirectory() .. "/util")
+require( GetScriptDirectory().."/meepo_status" )
 ----------------------------------------------------------------------------------------------------
 
-tableMeepos = { GetBot() }
+meepo_status.AddMeepo(GetBot())
 castNetDesire = 0;
 castPoofDesire = 0;
 castBlinkInitDesire = 0; 
@@ -29,19 +30,6 @@ function AbilityUsageThink()
 	local npcBot = GetBot();
 	min = math.floor(DotaTime() / 60)
 	sec = DotaTime() % 60
-
-	--Know Thyself
-	if (#tableMeepos == 1 and utils.GetHeroLevel() > 2) or
-		(#tableMeepos == 2 and utils.GetHeroLevel() > 9) or
-		(#tableMeepos == 3 and utils.GetHeroLevel() > 16)
-	then
-		tableNearbyFriends = npcBot:GetNearbyHeroes( 10000, false, BOT_MODE_NONE )
-		for k,v in ipairs(tableNearbyFriends) do
-			if v:GetUnitName() == "npc_dota_hero_meepo" then
-				table.insert(tableMeepos, v)
-			end
-		end
-	end
 
 	-- Check if we're already using an ability
 	if ( npcBot:IsUsingAbility() ) then return end;
@@ -151,7 +139,7 @@ function ConsiderEarthBind()
 			if ( not npcTarget:HasModifier("modifier_meepo_earthbind") and CanCastEarthBindOnTarget( npcTarget ) and GetUnitToUnitDistance( npcBot, npcTarget ) < nCastRange)
 			then
 			--print("Chase Net")
-				return BOT_ACTION_DESIRE_MODERATE, utils.GetXUnitsInFront(npcTarget, 100);
+				return BOT_ACTION_DESIRE_MODERATE, npcTarget:GetExtrapolatedLocation( GetUnitToUnitDistance( npcBot, npcTarget ) / 857  );
 			end
 		end
 	end
@@ -209,7 +197,7 @@ function ConsiderPoof()
 	-- If we're seriously retreating, see if we can poof away
 	if ( npcBot:GetActiveMode() == BOT_MODE_RETREAT and npcBot:GetActiveModeDesire() >= BOT_MODE_DESIRE_HIGH ) 
 	then
-		for _,meepo in pairs( tableMeepos )
+		for _,meepo in pairs( meepo_status.GetMeepos() )
 		do
 			if (npcBot:GetActiveMode() ~= BOT_MODE_RETREAT and
 		npcBot:GetActiveMode() ~= BOT_MODE_EVASIVE_MANEUVERS and
@@ -256,7 +244,7 @@ function ConsiderPoof()
 
 	-- If we're about to meepmeep someone
 	if npcBot:GetActiveMode() ~= BOT_MODE_RETREAT and npcBot:GetHealth() > (npcBot:GetMaxHealth() * .4) then
-		for _,meepo in pairs(tableMeepos) do
+		for _,meepo in pairs(meepo_status.GetMeepos()) do
 			tableNearbyEnemyHeroes = meepo:GetNearbyHeroes( 160, true, BOT_MODE_NONE );
 			if tableNearbyEnemyHeroes[1] ~= nil and meepo:GetActiveMode() ~= BOT_MODE_LANING then
 				--print("MeepMeep Poof")
@@ -283,7 +271,7 @@ function ConsiderBlinkInit()
 	-- Get some of its values
 	local nCastRange = 1200;
 	local nRadius = abilityPoof:GetSpecialValueInt( "radius" );
-	local dmg = abilityPoof:GetAbilityDamage() * #tableMeepos * 1.25
+	local dmg = abilityPoof:GetAbilityDamage() * #meepo_status.GetMeepos() * 1.25
 	-- Find vulnerable enemy 
 	local tableNearbyEnemyHeroes = npcBot:GetNearbyHeroes( 1300, true, BOT_MODE_NONE );
 	for k,v in ipairs(tableNearbyEnemyHeroes) do

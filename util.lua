@@ -4,9 +4,6 @@ X.tableNeutralCamps = vec["tableNeutralCamps"]  -- constant - shouldn't be modif
 X.tableRuneSpawns = vec["tableRuneSpawns"]
 ----------------------------------------------------------------------------------------------------
 
-
-----------------------------------------------------------------------------------------------------
-
 function X.IsFacingEntity( hUnit, hTarget, degAccuracy )
 
     local degree = nil;
@@ -23,7 +20,7 @@ function X.IsFacingEntity( hUnit, hTarget, degAccuracy )
         local vX = (targetX-unitX);
         local vY = (targetY-unitY);
 
-        local radians = math.atan( vX , vY );
+        local radians = math.atan2( vY , vX );
         degree = (radians * 180 / math.pi);
 
         -- We adjust the angle
@@ -50,15 +47,16 @@ function X.IsFacingEntity( hUnit, hTarget, degAccuracy )
             topBoundary = topBoundary - 360;
             flippedBoundaries = true;
         end
-
+        print("is facing! " .. degree .. ":" .. GetFacing() .. ":" .. degree - unit:GetFacing());
         if( ( flippedBoundaries and (topBoundary < unit:GetFacing() ) and ( unit:GetFacing() < botBoundary) ) or 
         ( not flippedBoundaries and (botBoundary < unit:GetFacing() ) and ( unit:GetFacing() < topBoundary) )    )
         then
-            --print("is facing!");
-            return true;
+            --print("is facing! " .. degree .. ":" .. GetFacing() .. ":" .. degree - unit:GetFacing());
+            return true
         end
     end
 
+    return false
 --[[
     if(degree ~= nil)
     then
@@ -84,12 +82,12 @@ function X.GetXUnitsTowardsLocation( fromloc, toloc, units)
     local vX = (targetX-unitX);
     local vY = (targetY-unitY);
 
-    local radians = math.atan( vX , vY );
-
-    local point = {}
-    point[1] = fromloc[1] + (math.cos(radians) * units);
-    point[2] = fromloc[2] + (math.sin(radians) * units);
-    return point;
+    local radians = math.atan2( vY , vX );
+    --radians = radians - 0.785398 --correct angle
+    local pointx = fromloc[1] + (math.cos(radians) * units);
+    local pointy = fromloc[2] + (math.sin(radians) * units);
+    
+    return Vector(pointx,pointy);
 end
 
 ----------------------------------------------------------------------------------------------------
@@ -261,9 +259,13 @@ function X.spairs(t, order)
     end
 end
 
+----------------------------------------------------------------------------------------------------
+
 function X.cloneTable(t)    
   return {unpack(t)}
 end
+
+----------------------------------------------------------------------------------------------------
 
 function X.deepcopy(orig)
     local orig_type = type(orig)
@@ -279,5 +281,62 @@ function X.deepcopy(orig)
     end
     return copy
 end
+
+----------------------------------------------------------------------------------------------------
+
+--check if a path from nloc1 to nloc2 that is nWidth wide is clear of units
+function X.isSkillPathClearOfUnits( hCaster, vTargetLoc, nWidth)
+    local heroWidth = 24 --this isn't true for lycan/naga/pl who are 8
+    local dist = heroWidth + nWidth + 1
+    local pointcount = GetUnitToLocationDistance(hCaster, vTargetLoc) / nWidth - 2
+    local pointlist = {}
+    local currentPoint = X.GetXUnitsTowardsLocation( vTargetLoc, hCaster:GetLocation(), dist )
+    
+    for i=0,pointcount do
+        --[[
+        for _,v in pairs(pointlist) do
+            DebugDrawCircle( v, nWidth, 0, 255, 50 )
+            DebugDrawCircle( hCaster:GetLocation(), nWidth, 0, 50, 255 )
+            DebugDrawCircle( vTargetLoc, nWidth, 255, 50, 50 )
+        end
+        ]]
+
+        table.insert(pointlist, currentPoint)
+        --print("added point")
+        dist = dist + nWidth
+        currentPoint = X.GetXUnitsTowardsLocation( vTargetLoc, hCaster:GetLocation(), dist )
+        --print(GetUnitToLocationDistance(hCaster, currentPoint))
+    end
+
+--[[ 
+    for _,v in pairs(pointlist) do
+        DebugDrawCircle( v, nWidth, 0, 255, 50 )
+        DebugDrawCircle( hCaster:GetLocation(), nWidth, 0, 50, 255 )
+        DebugDrawCircle( vTargetLoc, nWidth, 255, 50, 50 )
+    end
+]]
+    for _,v in pairs(pointlist) do
+        --print("checking point")
+        --DebugDrawCircle( v, nWidth, 0, 255, 50 )
+        --DebugDrawCircle( hCaster:GetLocation(), nWidth, 0, 50, 255 )
+        --DebugDrawCircle( vTargetLoc, nWidth, 255, 50, 50 )
+        local enemyHeroes = hCaster:FindAoELocation( true, true, v, 0, nWidth, 0.0, 100000 ) 
+        local enemyCreeps = hCaster:FindAoELocation( true, false, v, 0, nWidth, 0.0, 100000 ) 
+        local friendlyHeroes = hCaster:FindAoELocation( false, true, v, 0, nWidth, 0.0, 100000 ) 
+        local friendlyCreeps = hCaster:FindAoELocation( false, false, v, 0, nWidth, 0.0, 100000 ) 
+        if (enemyHeroes.count > 0 or
+            enemyCreeps.count > 0 or
+            friendlyHeroes.count > 0 or
+            friendlyCreeps.count > 0)
+        then
+            --print("path blocked")
+            return false
+        end
+    end
+    --print("Path Clear!")
+    return true
+end
+
+----------------------------------------------------------------------------------------------------
 
 return X;

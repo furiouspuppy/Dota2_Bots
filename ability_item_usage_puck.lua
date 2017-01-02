@@ -1,4 +1,6 @@
 local utils = require(GetScriptDirectory() .. "/util")
+local inspect = require(GetScriptDirectory() .. "/inspect")
+require( GetScriptDirectory().."/enemy_status" )
 ----------------------------------------------------------------------------------------------------
 
 
@@ -10,24 +12,12 @@ castOrbDesire = 0;
 castBlinkInitDesire = 0; 
 castForceEnemyDesire = 0;
 
+
+
 function AbilityUsageThink()
+
 	local npcBot = GetBot();
-
---test stuff
-	--local ttt = GetTeamPlayers(GetTeam())
-	--utils.print_r(ttt)
-	--[[local tableNearbyEnemyHeroes = npcBot:GetNearbyHeroes( 1300, true, BOT_MODE_NONE );
-	if tableNearbyEnemyHeroes[1] ~= nil then
-		utils.IsFacingEntity(npcBot, tableNearbyEnemyHeroes[1], 20)
-		local testnum = utils.GetXUnitsTowardsLocation( npcBot:GetLocation(), tableNearbyEnemyHeroes[1]:GetLocation(), 450 );
-		print(npcBot:GetLocation()[1] .. ":" .. npcBot:GetLocation()[2])
-		print(tostring(testnum[1] .. ":" .. testnum[2]))
-		local vec = Vector(testnum[1], testnum[2])
-		DebugDrawCircle( vec, 100.0, 255, 0, 0 );
-	end
-]]
-
-
+	--DebugDrawLine( Vector(npcBot:GetLocation()[1],npcBot:GetLocation()[2], npcBot:GetGroundHeight()), Vector(utils.GetXUnitsInFront(npcBot, 300)[1],utils.GetXUnitsInFront(npcBot, 300)[2], npcBot:GetGroundHeight()), 0, 255, 0 )
 	-- Check if we're already using an ability
 	if ( npcBot:IsUsingAbility() ) then return end;
 
@@ -441,16 +431,18 @@ function ConsiderDreamCoil()
 
 	-- If an enemy is under our tower...
 	local tableNearbyEnemyHeroes = npcBot:GetNearbyHeroes( nCastRange + nRadius, true, BOT_MODE_NONE );
-	local tableNearbyFriendlyTowers = npcBot:GetNearbyTowers( 1500, false );
-	local npcTarget = tableNearbyEnemyHeroes[1];
-	local tower = tableNearbyFriendlyTowers[1];	
-	if npcTarget ~= nil and tower ~= nil then
-		if ( GetUnitToUnitDistance( npcTarget, tower ) < 900 ) 
-		then
-			local coords = utils.GetXUnitsTowardsLocation( npcTarget:GetLocation(), tower:GetLocation(), nRadius - 20 );
-			return BOT_ACTION_DESIRE_HIGH, Vector(coords[1], coords[2])
+	local tableNearbyFriendlyTowers = npcBot:GetNearbyTowers( 1300, false );
+	if tower ~= nil then
+		for _,npcTarget in pairs(tableNearbyEnemyHeroes) do
+			if ( GetUnitToUnitDistance( npcTarget, tower ) < 1100 ) 
+			then
+				if(utils.IsFacingEntity( npcTarget, tower, 15 ) and npcTarget:HasModifier("modifier_puck_coiled") ) then
+					return BOT_ACTION_DESIRE_MODERATE, utils.GetXUnitsTowardsLocation(npcBot:GetLocation(), npcTarget:GetLocation(), nCastRange - 1);
+				end
+			end
 		end
 	end
+
 
 	return BOT_ACTION_DESIRE_NONE, 0;
 
@@ -506,17 +498,17 @@ function ConsiderForceEnemy()
 
 	local tableNearbyEnemyHeroes = npcBot:GetNearbyHeroes( 1300, true, BOT_MODE_NONE );
 	local tableNearbyFriendlyTowers = npcBot:GetNearbyTowers( 1300, false );
-	local npcTarget = tableNearbyEnemyHeroes[1];
-	local tower = tableNearbyFriendlyTowers[1];	
-	if npcTarget ~= nil and tower ~= nil then
-		if ( GetUnitToUnitDistance( npcTarget, tower ) < 1250 ) 
-		then
-			if(utils.IsFacingEntity( npcTarget, tower, 15 )) then
-
-				return BOT_ACTION_DESIRE_MODERATE, npcTarget;
+	if tower ~= nil then
+		for _,npcTarget in pairs(tableNearbyEnemyHeroes) do
+			if ( GetUnitToUnitDistance( npcTarget, tower ) < 1100 ) 
+			then
+				if(utils.IsFacingEntity( npcTarget, tower, 15 ) and npcTarget:HasModifier("modifier_puck_coiled") ) then
+					return BOT_ACTION_DESIRE_MODERATE, npcTarget;
+				end
 			end
 		end
 	end
+
 	return BOT_ACTION_DESIRE_NONE, 0;
 
 end

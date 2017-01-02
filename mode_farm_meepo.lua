@@ -67,7 +67,7 @@ function GetDesire()
 		min % 2 == 1 and sec > 50) 
 	then
     	npcBot:Action_MoveToLocation( utils.NearestRuneSpawn(npcBot, utils.tableRuneSpawns[POWERUP_RUNES]))
-		return BOT_MODE_DESIRE_ABSOLUTE
+		return BOT_MODE_DESIRE_VERY_HIGH
 	end
 
 	if level > 20 then
@@ -88,6 +88,17 @@ function GetDesire()
 
 	if jungle_status.GetJungle(team) == nil then
 		--return BOT_MODE_DESIRE_NONE
+	end
+
+	--don't leave fights
+	local tableNearbyAttackingAlliedHeroes = npcBot:GetNearbyHeroes( 1300, false, BOT_MODE_NONE );
+	for _,v in pairs(tableNearbyAttackingAlliedHeroes) do
+		if (v:GetActiveMode() == BOT_MODE_ATTACKING or
+			v:GetActiveMode() == BOT_MODE_RETREAT or
+			v:GetActiveMode() == BOT_MODE_DEFEND_ALLY)
+		then
+			return BOT_MODE_DESIRE_NONE
+		end
 	end
 
 	-- get the main in the jungle for shield benefit at low lvl
