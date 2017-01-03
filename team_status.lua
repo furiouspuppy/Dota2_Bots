@@ -1,6 +1,6 @@
-_G._savedEnv = getfenv()
-module( "team_status", package.seeall )
 local utils = require(GetScriptDirectory() .. "/util")
+----------------------------------------------------------------------------------------------------
+local X = {}
 
 local tableFriendlyHeroes = {}
 local tableRunes = {}
@@ -8,7 +8,7 @@ local tableNeedsHelp = {}
 
 ----------------------------------------------------------------------------------------------------
 --know thy enemy
-function FillHeroesTable ()
+function X.FillHeroesTable ()
 	if #tableFriendlyHeroes == 0 then
 		local us = GetTeamPlayers( GetTeam() )
 		local them
@@ -31,7 +31,7 @@ end
 
 ----------------------------------------------------------------------------------------------------
 --know thy enemy
-function GetHeroes ()
+function X.GetHeroes ()
 	if #tableFriendlyHeroes == 0 then
 		FillHeroesTable()
 	end
@@ -40,21 +40,21 @@ end
 
 ----------------------------------------------------------------------------------------------------
 --Call a rune
-function CallRune (rune)
+function X.CallRune (rune)
 	table.insert(tableRunes, rune)
 end
 
 ----------------------------------------------------------------------------------------------------
 
 --Check if rune is free
-function GetCalledRunes ()
+function X.GetCalledRunes ()
 	return tableRunes
 end
 
 ----------------------------------------------------------------------------------------------------
 
 --Clear Rune Calls
-function ClearCalledRunes ()
+function X.ClearCalledRunes ()
 	for k in pairs (tableRunes) do
     	tableRunes[k] = nil
 	end
@@ -62,4 +62,4 @@ end
 
 ----------------------------------------------------------------------------------------------------
 
-for k,v in pairs( team_status ) do	_G._savedEnv[k] = v end
+return X

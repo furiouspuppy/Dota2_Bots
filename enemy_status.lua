@@ -1,12 +1,12 @@
-_G._savedEnv = getfenv()
-module( "enemy_status", package.seeall )
 local utils = require(GetScriptDirectory() .. "/util")
+----------------------------------------------------------------------------------------------------
+local X = {}
 
 local tableEnemyHeroes = {}
 
 ----------------------------------------------------------------------------------------------------
 --know thy enemy
-function FillHeroesTable ()
+function X.FillHeroesTable ()
 	if #tableEnemyHeroes == 0 then
 		local us = GetTeamPlayers( GetTeam() )
 		local them
@@ -29,7 +29,7 @@ end
 
 ----------------------------------------------------------------------------------------------------
 --know thy enemy
-function GetHeroes ()
+function X.GetHeroes ()
 	if #tableEnemyHeroes == 0 then
 		FillHeroesTable()
 	end
@@ -38,4 +38,4 @@ end
 
 ----------------------------------------------------------------------------------------------------
 
-for k,v in pairs( enemy_status ) do	_G._savedEnv[k] = v end
+return X

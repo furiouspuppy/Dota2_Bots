@@ -3,7 +3,7 @@
 end
 ]]
 local utils = require(GetScriptDirectory() .. "/util")
-require( GetScriptDirectory().."/team_status" )
+local teamStatus = require( GetScriptDirectory().."/team_status" )
 ----------------------------------------------------------------------------------------------------
 
 local min = 0
@@ -22,7 +22,7 @@ function GetDesire()
 	if min % 2 == 0 and runeCalled then
 		runeCalled = false
 		waiting = false
-		team_status.ClearCalledRunes()
+		teamStatus.ClearCalledRunes()
 	end 
 
 	--we've called one go get it
@@ -90,7 +90,7 @@ function GetDesire()
 		end
 
 		rune = utils.NearestRuneSpawn( npcBot, options )
-		for _,v in pairs(team_status.GetCalledRunes()) do
+		for _,v in pairs(teamStatus.GetCalledRunes()) do
 			if v == rune then
 				return BOT_MODE_DESIRE_NONE
 			end
@@ -104,7 +104,7 @@ function GetDesire()
 		if waiting and DotaTime() < callTime then
 			return BOT_MODE_DESIRE_NONE
 		end
-		team_status.CallRune(rune)
+		teamStatus.CallRune(rune)
 		runeCalled = true
 		return BOT_MODE_DESIRE_HIGH 
 	end
