@@ -3,6 +3,7 @@ module( "team_status", package.seeall )
 local utils = require(GetScriptDirectory() .. "/util")
 
 local tableFriendlyHeroes = {}
+local tableRunes = {}
 local tableNeedsHelp = {}
 
 ----------------------------------------------------------------------------------------------------
@@ -35,6 +36,28 @@ function GetHeroes ()
 		FillHeroesTable()
 	end
 	return tableFriendlyHeroes
+end
+
+----------------------------------------------------------------------------------------------------
+--Call a rune
+function CallRune (rune)
+	table.insert(tableRunes, rune)
+end
+
+----------------------------------------------------------------------------------------------------
+
+--Check if rune is free
+function GetCalledRunes ()
+	return tableRunes
+end
+
+----------------------------------------------------------------------------------------------------
+
+--Clear Rune Calls
+function ClearCalledRunes ()
+	for k in pairs (tableRunes) do
+    	tableRunes[k] = nil
+	end
 end
 
 ----------------------------------------------------------------------------------------------------

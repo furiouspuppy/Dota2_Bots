@@ -246,9 +246,11 @@ function ConsiderPoof()
 	if npcBot:GetActiveMode() ~= BOT_MODE_RETREAT and npcBot:GetHealth() > (npcBot:GetMaxHealth() * .4) then
 		for _,meepo in pairs(meepo_status.GetMeepos()) do
 			tableNearbyEnemyHeroes = meepo:GetNearbyHeroes( 160, true, BOT_MODE_NONE );
-			if tableNearbyEnemyHeroes[1] ~= nil and meepo:GetActiveMode() ~= BOT_MODE_LANING then
-				--print("MeepMeep Poof")
-				return BOT_ACTION_DESIRE_HIGH, meepo;
+			if tableNearbyEnemyHeroes ~= nil then
+				if tableNearbyEnemyHeroes[1] ~= nil and meepo:GetActiveMode() ~= BOT_MODE_LANING then
+					--print("MeepMeep Poof")
+					return BOT_ACTION_DESIRE_HIGH, meepo;
+				end
 			end
 		end
 	end

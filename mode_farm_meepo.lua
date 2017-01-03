@@ -1,14 +1,13 @@
 local utils = require(GetScriptDirectory() .. "/util")
 require( GetScriptDirectory().."/jungle_status" )
 --print("Farm mode instantiated")
+local inspect = require(GetScriptDirectory() .. "/inspect")
 ----------------------------------------------------------------------------------------------------
 
 STATE_IDLE = "STATE_IDLE"
 STATE_MOVING_TOCAMP = "STATE_MOVING_TOCAMP"
 STATE_STACKING_CAMP = "STATE_STACKING_CAMP"
 STATE_ATTACKING_CAMP = "STATE_ATTACKING_CAMP"
-STATE_RUNE_HUNTING = "STATE_RUNE_HUNTING"
-STATE_GATHERING_RUNE = "STATE_GATHERING_RUNE"
 
 local state = STATE_IDLE
 local npcBot = GetBot()
@@ -19,7 +18,6 @@ local clone = -1
 jungle_status.NewJungle()
 local campToFarm = nil
 local campToStack = nil
-local rune
 local creepRespawn = true
 local runeRespawn = true
 local min = 0
@@ -28,7 +26,9 @@ local sec = 0
 ----------------------------------------------------------------------------------------------------
 
 function GetDesire()
-	--print(tostring(GetRuneStatus( RUNE_BOUNTY_1 ) == RUNE_STATUS_AVAILABLE ))
+	local testtt = GetNeutralSpawners()
+	--utils.print_r(testtt)
+	--print(assert(inspect.inspect(testtt)))
 	local desireMultiplier = 1
 	level = utils.GetHeroLevel()
 	min = math.floor(DotaTime() / 60)
@@ -49,26 +49,7 @@ function GetDesire()
 		--print("clone " .. clone)
 	end
 
-	--TODO Get this mess outta here...
-	if (npcBot:GetActiveMode() ~= BOT_MODE_RETREAT and
-		npcBot:GetActiveMode() ~= BOT_MODE_EVASIVE_MANEUVERS and
-		npcBot:GetActiveMode() ~= BOT_MODE_DEFEND_ALLY)
-	then
-		GrabRune()
-	end
 
-	if ( (npcBot:GetActiveMode() ~= BOT_MODE_RETREAT and
-		npcBot:GetActiveMode() ~= BOT_MODE_EVASIVE_MANEUVERS and
-		npcBot:GetActiveMode() ~= BOT_MODE_ATTACKING and
-		npcBot:GetActiveMode() ~= BOT_MODE_DEFEND_ALLY) and 
-		((clone == 0 and level < 2) or 
-		(clone == 1 and level < 11) or 
-		(clone == 0 and level > 10)) and 
-		min % 2 == 1 and sec > 50) 
-	then
-    	npcBot:Action_MoveToLocation( utils.NearestRuneSpawn(npcBot, utils.tableRuneSpawns[POWERUP_RUNES]))
-		return BOT_MODE_DESIRE_VERY_HIGH
-	end
 
 	if level > 20 then
 		desireMultiplier = .6
@@ -138,17 +119,6 @@ function Think()
 	min = math.floor(DotaTime() / 60)
 	sec = DotaTime() % 60
 
-	-- force rune attemp TODO get this mess outta here...
-	if ( min >=1 and 
-		((clone == 0 and level < 2) or 
-		(clone == 1 and level < 11) or 
-		(clone == 0 and level > 10)) and 
-		min % 2 == 1 and sec > 50) 
-	then
-    	npcBot:Action_MoveToLocation( utils.NearestRuneSpawn(npcBot, utils.tableRuneSpawns[POWERUP_RUNES]))
-    	return
-    end
-
 	-- check if time to setup stacking
 	if (not (state == STATE_MOVING_TOSTACK or
 		state == STATE_STACKING_CAMP) and min % 2 == 0 and sec > 40) then
@@ -176,14 +146,6 @@ function Think()
 			campToStack = utils.NearestNeutralCamp( npcBot, jungle_status.GetJungle(team))
 			state = STATE_MOVING_TOSTACK
 		end
-	end
-
-	-- check if time to for runes
-	if ( min % 2 == 1 and sec > 50) then
-		--print("Rune Time!")
-		rune = utils.NearestRuneSpawn(npcBot, utils.tableRuneSpawns[team])
-		state = STATE_RUNE_HUNTING
-		return
 	end
 
 	if state == STATE_IDLE then
@@ -272,41 +234,4 @@ function Think()
 			return
 		end
 	end
-
-	if state == STATE_RUNE_HUNTING then
-		if GetUnitToLocationDistance( npcBot, rune ) < 200 and min % 2 == 0 then
-			state = STATE_IDLE
-		end
-		npcBot:Action_MoveToLocation(rune)
-	end
-end
-
-function GrabRune()
-	
-	-- grab a rune if we walk by it
-	if (GetUnitToLocationDistance( npcBot , RAD_BOUNTY_RUNE_SAFE) < 450 and
-		GetRuneStatus( RUNE_BOUNTY_1 ) == RUNE_STATUS_AVAILABLE )
-	then   
-    	npcBot:Action_PickUpRune(RUNE_BOUNTY_1);
-    elseif (GetUnitToLocationDistance( npcBot , RAD_BOUNTY_RUNE_OFF) < 450 and
-		GetRuneStatus( RUNE_BOUNTY_2 ) == RUNE_STATUS_AVAILABLE )
-	then   
-    	npcBot:Action_PickUpRune(RUNE_BOUNTY_2);
-	elseif (GetUnitToLocationDistance( npcBot , DIRE_BOUNTY_RUNE_SAFE) < 450 and
-		GetRuneStatus( RUNE_BOUNTY_3 ) == RUNE_STATUS_AVAILABLE )
-	then   
-    	npcBot:Action_PickUpRune(RUNE_BOUNTY_3);
-	elseif (GetUnitToLocationDistance( npcBot , DIRE_BOUNTY_RUNE_OFF) < 450 and
-		GetRuneStatus( RUNE_BOUNTY_4 ) == RUNE_STATUS_AVAILABLE )
-	then    
-    	npcBot:Action_PickUpRune(RUNE_BOUNTY_4);
-    elseif (GetUnitToLocationDistance( npcBot , POWERUP_RUNE_TOP) < 450 and
-		GetRuneStatus( RUNE_POWERUP_1 ) == RUNE_STATUS_AVAILABLE )
-	then    
-    	npcBot:Action_PickUpRune(RUNE_POWERUP_1);
-    elseif (GetUnitToLocationDistance( npcBot , POWERUP_RUNE_BOT) < 450 and
-		GetRuneStatus( RUNE_POWERUP_2 ) == RUNE_STATUS_AVAILABLE )
-	then    
-    	npcBot:Action_PickUpRune(RUNE_POWERUP_2);
-    end
 end
