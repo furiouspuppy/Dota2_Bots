@@ -1,21 +1,22 @@
-_G._savedEnv = getfenv()
-module( "meepo_status", package.seeall )
 local utils = require(GetScriptDirectory() .. "/util")
+----------------------------------------------------------------------------------------------------
+local X = {}
 
 local tableMeepos = {}
 
 ----------------------------------------------------------------------------------------------------
 --know thy enemy
-function AddMeepo ( meepo )
+function X.AddMeepo ( meepo )
 	table.insert(tableMeepos, meepo)
+	utils.print_r(tableMeepos)
 end
 
 ----------------------------------------------------------------------------------------------------
 --know thy enemy
-function GetMeepos ()
+function X.GetMeepos ()
 	return tableMeepos
 end
 
 ----------------------------------------------------------------------------------------------------
 
-for k,v in pairs( meepo_status ) do	_G._savedEnv[k] = v end
+return X

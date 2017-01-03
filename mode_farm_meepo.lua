@@ -1,5 +1,5 @@
 local utils = require(GetScriptDirectory() .. "/util")
-require( GetScriptDirectory().."/jungle_status" )
+local jungleStatus = require( GetScriptDirectory().."/jungle_status" )
 --print("Farm mode instantiated")
 local inspect = require(GetScriptDirectory() .. "/inspect")
 ----------------------------------------------------------------------------------------------------
@@ -15,7 +15,7 @@ local player = npcBot:GetPlayer()
 local team = GetTeam()
 local level = utils.GetHeroLevel()
 local clone = -1
-jungle_status.NewJungle()
+jungleStatus.NewJungle()
 local campToFarm = nil
 local campToStack = nil
 local creepRespawn = true
@@ -57,7 +57,7 @@ function GetDesire()
 
 	--respawn camps
 	if creepRespawn and (min % 2) == 1 then
-		jungle_status.NewJungle() 
+		jungleStatus.NewJungle() 
 		runeRespawn = true
 		creepRespawn = false
 	end
@@ -67,7 +67,7 @@ function GetDesire()
 		creepRespawn = true
 	end
 
-	if jungle_status.GetJungle(team) == nil then
+	if jungleStatus.GetJungle(team) == nil then
 		--return BOT_MODE_DESIRE_NONE
 	end
 
@@ -137,13 +137,13 @@ function Think()
 				return
 			end
 		end	
-		--utils.print_r(jungle_status.GetJungle(team))
-		if jungle_status.GetJungle(team) == nil then
+		--utils.print_r(jungleStatus.GetJungle(team))
+		if jungleStatus.GetJungle(team) == nil then
 			--print("whole jungle dead")			
 			campToFarm = { [VECTOR] = utils.tableRuneSpawns[team][1] }
 			state = STATE_IDLE
 		else
-			campToStack = utils.NearestNeutralCamp( npcBot, jungle_status.GetJungle(team))
+			campToStack = utils.NearestNeutralCamp( npcBot, jungleStatus.GetJungle(team))
 			state = STATE_MOVING_TOSTACK
 		end
 	end
@@ -151,7 +151,7 @@ function Think()
 	if state == STATE_IDLE then
 		--print("#"..clone.." is IDLE")
 		-- setup jungle decisions for current level
-		local campsICanHandle = utils.deepcopy(jungle_status.GetJungle(team))
+		local campsICanHandle = utils.deepcopy(jungleStatus.GetJungle(team))
 		if campsICanHandle ~= nil then
 			camplvl = CAMP_EASY
 			if level > 4 then camplvl = CAMP_MEDIUM end
@@ -197,7 +197,7 @@ function Think()
 		if tableCreeps[1] == nil then
 			if GetUnitToLocationDistance( npcBot, campToFarm[VECTOR]) < 200 
 			then
-				jungle_status.JungleCampClear( team, campToFarm[VECTOR] )
+				jungleStatus.JungleCampClear( team, campToFarm[VECTOR] )
 			end
 			state = STATE_IDLE
 		else
@@ -210,7 +210,7 @@ function Think()
 
 	if state == STATE_STACKING_CAMP then
 		--print("#"..clone.." is STACKING camp:"..campToFarm)
-		if min % 2 == 1 then 
+		if min % 2 == 1 or campToStack == nil then 
 			state = STATE_IDLE
 			return
 			--stack

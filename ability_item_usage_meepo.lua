@@ -1,8 +1,14 @@
 local utils = require(GetScriptDirectory() .. "/util")
-require( GetScriptDirectory().."/meepo_status" )
+local meepoStatus = require( GetScriptDirectory().."/meepo_status" )
 ----------------------------------------------------------------------------------------------------
 
-meepo_status.AddMeepo(GetBot())
+if not GetBot():IsIllusion() then
+	meepoStatus.AddMeepo(GetBot())
+else
+	print("ILLUSION ALERT!")
+end
+
+
 castNetDesire = 0;
 castPoofDesire = 0;
 castBlinkInitDesire = 0; 
@@ -197,7 +203,7 @@ function ConsiderPoof()
 	-- If we're seriously retreating, see if we can poof away
 	if ( npcBot:GetActiveMode() == BOT_MODE_RETREAT and npcBot:GetActiveModeDesire() >= BOT_MODE_DESIRE_HIGH ) 
 	then
-		for _,meepo in pairs( meepo_status.GetMeepos() )
+		for _,meepo in pairs( meepoStatus.GetMeepos() )
 		do
 			if (npcBot:GetActiveMode() ~= BOT_MODE_RETREAT and
 		npcBot:GetActiveMode() ~= BOT_MODE_EVASIVE_MANEUVERS and
@@ -244,7 +250,7 @@ function ConsiderPoof()
 
 	-- If we're about to meepmeep someone
 	if npcBot:GetActiveMode() ~= BOT_MODE_RETREAT and npcBot:GetHealth() > (npcBot:GetMaxHealth() * .4) then
-		for _,meepo in pairs(meepo_status.GetMeepos()) do
+		for _,meepo in pairs(meepoStatus.GetMeepos()) do
 			tableNearbyEnemyHeroes = meepo:GetNearbyHeroes( 160, true, BOT_MODE_NONE );
 			if tableNearbyEnemyHeroes ~= nil then
 				if tableNearbyEnemyHeroes[1] ~= nil and meepo:GetActiveMode() ~= BOT_MODE_LANING then
@@ -273,7 +279,7 @@ function ConsiderBlinkInit()
 	-- Get some of its values
 	local nCastRange = 1200;
 	local nRadius = abilityPoof:GetSpecialValueInt( "radius" );
-	local dmg = abilityPoof:GetAbilityDamage() * #meepo_status.GetMeepos() * 1.25
+	local dmg = abilityPoof:GetAbilityDamage() * #meepoStatus.GetMeepos() * 1.25
 	-- Find vulnerable enemy 
 	local tableNearbyEnemyHeroes = npcBot:GetNearbyHeroes( 1300, true, BOT_MODE_NONE );
 	for k,v in ipairs(tableNearbyEnemyHeroes) do
