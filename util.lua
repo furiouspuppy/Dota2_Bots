@@ -9,7 +9,7 @@ function X.IsFacingEntity( hUnit, hTarget, degAccuracy )
     local degree = nil;
 
     -- Do we have a target?
-    if(target ~= nil)
+    if(hTarget ~= nil)
     then
         -- Get my hero and my heros target location
         local unitX = hUnit:GetLocation()[1];
@@ -47,9 +47,9 @@ function X.IsFacingEntity( hUnit, hTarget, degAccuracy )
             topBoundary = topBoundary - 360;
             flippedBoundaries = true;
         end
-        print("is facing! " .. degree .. ":" .. GetFacing() .. ":" .. degree - unit:GetFacing());
-        if( ( flippedBoundaries and (topBoundary < unit:GetFacing() ) and ( unit:GetFacing() < botBoundary) ) or 
-        ( not flippedBoundaries and (botBoundary < unit:GetFacing() ) and ( unit:GetFacing() < topBoundary) )    )
+        print("is facing! " .. degree .. ":" .. hUnit:GetFacing() .. ":" .. degree - hUnit:GetFacing());
+        if( ( flippedBoundaries and (topBoundary < hUnit:GetFacing() ) and ( hUnit:GetFacing() < botBoundary) ) or 
+        ( not flippedBoundaries and (botBoundary < hUnit:GetFacing() ) and ( hUnit:GetFacing() < topBoundary) )    )
         then
             --print("is facing! " .. degree .. ":" .. GetFacing() .. ":" .. degree - unit:GetFacing());
             return true
