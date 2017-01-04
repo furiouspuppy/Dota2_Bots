@@ -17,6 +17,7 @@ castForceEnemyDesire = 0;
 function AbilityUsageThink()
 
 	local npcBot = GetBot();
+	DebugDrawCircle(Vector(npcBot:GetLocation()[1],npcBot:GetLocation()[2], npcBot:GetGroundHeight()), 20, 0, 255, 0);
 	--DebugDrawLine( Vector(npcBot:GetLocation()[1],npcBot:GetLocation()[2], npcBot:GetGroundHeight()), Vector(utils.GetXUnitsInFront(npcBot, 300)[1],utils.GetXUnitsInFront(npcBot, 300)[2], npcBot:GetGroundHeight()), 0, 255, 0 )
 	-- Check if we're already using an ability
 	if ( npcBot:IsUsingAbility() ) then return end;
