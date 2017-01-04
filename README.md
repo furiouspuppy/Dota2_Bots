@@ -2,6 +2,9 @@
 
 With 7.00 came a long awaited supported AI for writing our own bots, I play a LOT of bot games with friends so I couldn't resist taking a crack at it.  Gives me an excuse to learn LUA as well.
 
+##Updates!
+Added code for rune collection on all bots, including default bots.
+
 ##Current Bots Under Development
 Meepo - playable/rough - Laning is pretty much default for 1 clone and the rest jungle/steal runes/over commit.  TODO's Fights,Skill decisions,more efficient rune/jungle,escape
 
@@ -11,6 +14,8 @@ Clockwerk - rough - TODO's need fight awareness and much skill work
 
 ##Current General Modes Under Development
 Jungling - Team wide jungle camp tracking, easy to use vectors
+
+Runes - Bots can 'call' runes to be theirs and go and collect them.  Will also grab any rune it walks by that is available.  
 
 Item Purchase - Set up for easily adding a new bot with just an item/skill build list
 
