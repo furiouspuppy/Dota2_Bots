@@ -8,7 +8,7 @@ local tableMeepos = {}
 --know thy enemy
 function X.AddMeepo ( meepo )
 	table.insert(tableMeepos, meepo)
-	utils.print_r(tableMeepos)
+	--utils.print_r(tableMeepos)
 end
 
 ----------------------------------------------------------------------------------------------------

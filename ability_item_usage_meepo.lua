@@ -139,13 +139,28 @@ function ConsiderEarthBind()
 		 npcBot:GetActiveMode() == BOT_MODE_DEFEND_ALLY ) 
 	then
 		local npcTarget = npcBot:GetTarget();
-
 		if ( npcTarget ~= nil ) 
 		then
 			if ( not npcTarget:HasModifier("modifier_meepo_earthbind") and CanCastEarthBindOnTarget( npcTarget ) and GetUnitToUnitDistance( npcBot, npcTarget ) < nCastRange)
 			then
-			--print("Chase Net")
-				return BOT_ACTION_DESIRE_MODERATE, npcTarget:GetExtrapolatedLocation( GetUnitToUnitDistance( npcBot, npcTarget ) / 857  );
+				-- closest meepo with net should cast
+				local closest = 0
+				local distance = 100000
+				for _,meepo in pairs(meepoStatus.GetMeepos()) do
+					local net = meepo:GetAbilityByName("meepo_earthbind")
+					if net:IsFullyCastable() or net:GetCooldownTimeRemaining() > 7 then
+						if GetUnitToUnitDistance(meepo, npcTarget) < distance then
+							distance = GetUnitToUnitDistance(meepo, npcTarget)
+							closest = meepo
+						end
+					end
+				end
+				if closest ~= npcBot then
+					return BOT_ACTION_DESIRE_NONE
+				end
+
+				--print("Chase Net At:" ..  GetUnitToUnitDistance( npcBot, npcTarget ) / 857 .. ":" .. tostring(npcTarget:GetExtrapolatedLocation( (GetUnitToUnitDistance( npcBot, npcTarget ) / 857))  + npcTarget:GetLocation() ))
+				return BOT_ACTION_DESIRE_MODERATE, (npcTarget:GetExtrapolatedLocation( GetUnitToUnitDistance( npcBot, npcTarget ) / 857  ) + npcTarget:GetLocation());
 			end
 		end
 	end
@@ -238,7 +253,7 @@ function ConsiderPoof()
 	end
 
 		-- if we're farming and feel like it
-	if ( npcBot:GetActiveMode() == BOT_MODE_FARM and not (min % 2 == 0 and sec > 40)) 
+	if ( npcBot:GetActiveMode() == BOT_MODE_FARM and not ((min % 2 == 0 and sec > 40) or (min %2 == 1 and sec < 3)))
 	then
 		local tableNearbyCreeps = npcBot:GetNearbyCreeps( nRadius, true ) 
 		if(npcBot:GetMana() > (npcBot:GetMaxMana() * (.4 - (1 - (npcBot:GetHealth() / npcBot:GetMaxHealth())))) and #tableNearbyCreeps >= 2)
@@ -248,13 +263,25 @@ function ConsiderPoof()
 		end
 	end
 
+	-- If we need to save another meepo
+	if npcBot:GetActiveMode() ~= BOT_MODE_RETREAT and npcBot:GetHealth() > (npcBot:GetMaxHealth() * .4) then
+		for _,meepo in pairs(meepoStatus.GetMeepos()) do
+			tableNearbyEnemyHeroes = meepo:GetNearbyHeroes( 1300, true, BOT_MODE_NONE );
+			if tableNearbyEnemyHeroes ~= nil and GetUnitToUnitDistance(npcBot, meepo) > 2000 then
+				if meepo:WasRecentlyDamagedByAnyHero( 1.0 ) then
+					return BOT_ACTION_DESIRE_HIGH, meepo
+				end
+			end
+		end
+	end
+
 	-- If we're about to meepmeep someone
 	if npcBot:GetActiveMode() ~= BOT_MODE_RETREAT and npcBot:GetHealth() > (npcBot:GetMaxHealth() * .4) then
 		for _,meepo in pairs(meepoStatus.GetMeepos()) do
 			tableNearbyEnemyHeroes = meepo:GetNearbyHeroes( 160, true, BOT_MODE_NONE );
-			if tableNearbyEnemyHeroes ~= nil then
+			if tableNearbyEnemyHeroes ~= nil and npcBot:GetHealth() > meepo:GetHealth() then
 				if tableNearbyEnemyHeroes[1] ~= nil and meepo:GetActiveMode() ~= BOT_MODE_LANING then
-					--print("MeepMeep Poof")
+					--print("Save Poof")
 					return BOT_ACTION_DESIRE_HIGH, meepo;
 				end
 			end

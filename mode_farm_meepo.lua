@@ -82,22 +82,27 @@ function GetDesire()
 		end
 	end
 
+	if npcBot:GetHealth() < (npcBot:GetMaxHealth() * .25) then
+		return BOT_MODE_DESIRE_NONE
+	end
+
 	-- get the main in the jungle for shield benefit at low lvl
 	-- then move the main to start roaming later
 	if level > 2 and level < 11 then
 		if clone == 1 then
 			--print("I'm the lane bitch")
-			return RemapValClamped( 0.0 * desireMultiplier, 0.0, 1.0, BOT_MODE_DESIRE_NONE, BOT_MODE_DESIRE_ABSOLUTE );
+			return BOT_MODE_DESIRE_NONE
 		end
-			return RemapValClamped( (npcBot:GetHealth() / (npcBot:GetMaxHealth() * 1.2))* desireMultiplier , 0.0, 1.0, BOT_MODE_DESIRE_NONE, BOT_MODE_DESIRE_ABSOLUTE );
+			return BOT_MODE_DESIRE_HIGH
 	else
 		if clone == 0 then
 			--print("Time to roam")
-			return RemapValClamped( 0.0 * desireMultiplier, 0.0, 1.0, BOT_MODE_DESIRE_NONE, BOT_MODE_DESIRE_ABSOLUTE );
+			return BOT_MODE_DESIRE_NONE
 		end
-			return RemapValClamped( (npcBot:GetHealth() / (npcBot:GetMaxHealth() * 1.2))* desireMultiplier , 0.0, 1.0, BOT_MODE_DESIRE_NONE, BOT_MODE_DESIRE_ABSOLUTE );
+		return BOT_MODE_DESIRE_HIGH
 	end
-	return RemapValClamped( 0.0 * desireMultiplier, 0.0, 1.0, BOT_MODE_DESIRE_NONE, BOT_MODE_DESIRE_HIGH );
+
+	return BOT_MODE_DESIRE_NONE
 end
 
 ----------------------------------------------------------------------------------------------------
