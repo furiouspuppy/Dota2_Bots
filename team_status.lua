@@ -1,4 +1,4 @@
-local utils = require(GetScriptDirectory() .. "/util")
+local utils = require("bots" .. "/util")
 ----------------------------------------------------------------------------------------------------
 local X = {}
 

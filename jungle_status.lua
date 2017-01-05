@@ -1,7 +1,7 @@
 local X = {}
 ----------------------------------------------------------------------------------------------------
 
-local utils = require(GetScriptDirectory() .. "/util")
+local utils = require("bots" .. "/util")
 local isJungleFresh = true
 local jungle = utils.deepcopy(utils.tableNeutralCamps)
 ----------------------------------------------------------------------------------------------------

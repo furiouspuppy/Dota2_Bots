@@ -2,8 +2,8 @@
 	return ( 0.0);
 end
 ]]
-local utils = require(GetScriptDirectory() .. "/util")
-local teamStatus = require( GetScriptDirectory().."/team_status" )
+local utils = require("bots" .. "/util")
+local teamStatus = require( "bots".."/team_status" )
 ----------------------------------------------------------------------------------------------------
 
 local min = 0
