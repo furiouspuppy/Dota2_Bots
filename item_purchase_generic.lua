@@ -21,9 +21,10 @@ local tableItemsToBuy = build["items"]
 
 -- Think function for spending skill points
 local function ThinkLvlupAbility(level)
+    local npcBot = GetBot()
     -- Do I have a skill point?
-    --print (#BotAbilityPriority .. " > " .. "25 - " .. utils.GetHeroLevel())
-    if (#BotAbilityPriority > (25 - utils.GetHeroLevel())) then  
+    --print (#BotAbilityPriority .. " > " .. "25 - " .. npcBot:GetHeroLevel())
+    if (#BotAbilityPriority > (25 - npcBot:GetHeroLevel())) then  
         local ability_name = BotAbilityPriority[1];
         -- Can I slot a skill with this skill point?
         if(ability_name ~="-1")
@@ -55,7 +56,7 @@ function ItemPurchaseThink()
     
     -- check if real meepo
     if( GetBot():GetUnitName() == "npc_dota_hero_meepo") then
-        if(utils.GetHeroLevel() > 1) then
+        if(npcBot:GetHeroLevel() > 1) then
             for i=0, 5 do
                 if(npcBot:GetItemInSlot(i) ~= nil ) then
                     if not (npcBot:GetItemInSlot(i):GetName() == "item_boots" or npcBot:GetItemInSlot(i):GetName() == "item_power_treads") then
@@ -75,10 +76,6 @@ function ItemPurchaseThink()
 	local currentItems = {}
 	for i=0, 8 do
 		currentItems[i] = npcBot:GetItemInSlot(i)
-	end
-
-	for i,v in ipairs(currentItems) do
-
 	end
 
 	if ( #tableItemsToBuy == 0 )
@@ -112,47 +109,6 @@ function ItemPurchaseThink()
     		table.remove( tableItemsToBuy, 1 );
         end
 	end
-    --hack job to sell items to make room for others
---[[
-    for i=6, 8 do
-        if(npcBot:GetItemInSlot(i) ~= nil and GetItemCost( npcBot:GetItemInSlot(i):GetName() ) > 1000 ) then
-            npcBot.secretShopMode = true
-        end
-    end
-
-    if utils.GetHeroLevel() > 1 and npcBot:DistanceFromFountain( ) == 0 or npcBot:DistanceFromSecretShop() == 0 then
-        local currentItems = {}
-        for i=0, 5 do
-            if(npcBot:GetItemInSlot(i) ~= nil) then
-                local _item = npcBot:GetItemInSlot(i):GetName()
-                table.insert(currentItems, _item)
-            end
-        end
-        local packItems = {}
-        for i=6, 8 do
-            if(npcBot:GetItemInSlot(i) ~= nil) then
-                local _item = npcBot:GetItemInSlot(i)
-                npcBot:Action_DropItem(npcBot:GetItemInSlot(i), npcBot:GetLocation())
-                table.insert(packItems, _item)
-            end
-        end
-        if (#packItems > 0) then
-            print(#packItems .. " Items Dropped")
-            local itemSellList = {"item_tango","item_iron_talon","item_poor_mans_shield"}
-            for i=0, #packItems do
-                for k,v in pairs(currentItems) do
-                    if v == itemSellList[1] then
-                        npcBot:Action_SellItem( npcBot:GetItemInSlot(k) )
-                        table.remove(itemSellList, 1)
-                    end
-                end
-            end
-            print(#packItems .. " Items Sold")
-            for _,v in pairs(packItems) do
-                npcBot:Action_PickUpItem(v)
-            end
-        end
-    end	]]
 end
 
 ----------------------------------------------------------------------------------------------------
@@ -168,10 +124,10 @@ local ability_name = BotAbilityPriority[1];
 local ability = GetBot():GetAbilityByName(ability_name);
 --print(ability:GetLevel())
 if(ability ~= nil and ability:GetLevel() > 0) then
-    --print (#BotAbilityPriority .. " > " .. "25 - " .. utils.GetHeroLevel())
-    if #BotAbilityPriority > (25 - utils.GetHeroLevel()) then
-        --print(#BotAbilityPriority - (25 - utils.GetHeroLevel()))
-        for i=1, (#BotAbilityPriority - (25 - utils.GetHeroLevel())) do
+    --print (#BotAbilityPriority .. " > " .. "25 - " .. npcBot:GetHeroLevel())
+    if #BotAbilityPriority > (25 - npcBot:GetHeroLevel()) then
+        --print(#BotAbilityPriority - (25 - npcBot:GetHeroLevel()))
+        for i=1, (#BotAbilityPriority - (25 - npcBot:GetHeroLevel())) do
             table.remove(BotAbilityPriority, 1)
         end
     end

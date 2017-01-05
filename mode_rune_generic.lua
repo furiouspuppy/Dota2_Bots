@@ -89,7 +89,7 @@ function GetDesire()
 			table.insert(options, v)
 		end
 
-		rune = utils.NearestRuneSpawn( npcBot, options )
+		rune = npcBot:GetNearest( options )
 		for _,v in pairs(teamStatus.GetCalledRunes()) do
 			if v == rune then
 				return BOT_MODE_DESIRE_NONE
@@ -163,7 +163,7 @@ function Think()
 
 
     if GameTime() < 200 then
-    	npcBot:Action_MoveToLocation( utils.NearestRuneSpawn(npcBot, utils.tableRuneSpawns[GetTeam()]))
+    	npcBot:Action_MoveToLocation( npcBot:GetNearest( utils.tableRuneSpawns[GetTeam()]))
 		return
     end
 

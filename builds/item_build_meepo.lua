@@ -1,5 +1,5 @@
 X = {}
---[[ NOT SURE IF STILL AN ISSUE: warning if meepo does not have an item other than 
+--[[ warning if meepo does not have an item other than 
 brown boots / power treads at any time he will think he 
 is a clone and skill/item decisions will possilby break! ]]
 X["items"] = {
@@ -14,13 +14,13 @@ X["items"] = {
 "item_boots", -- power treads
 "item_gloves",-- power treads
 "item_belt_of_strength",-- power treads
+"item_boots_of_elves",-- dragon lance
+"item_boots_of_elves",-- dragon lance
+"item_ogre_axe", -- dragon lance
 "item_blade_of_alacrity", -- aghs
 "item_ogre_axe",-- aghs
 "item_point_booster",-- aghs
 "item_staff_of_wizardry",-- aghs
-"item_ogre_axe", -- dragon lance
-"item_boots_of_elves",-- dragon lance
-"item_boots_of_elves",-- dragon lance
 "item_blink",
 "item_blade_of_alacrity", -- yasha
 "item_boots_of_elves", -- yasha

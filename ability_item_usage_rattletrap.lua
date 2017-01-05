@@ -264,20 +264,7 @@ function ConsiderHook()
 			end
 		end
 	end
-
-	-- test pathing
---[[
-	local tableNearbyEnemyHeroes = npcBot:GetNearbyHeroes( 1300, true, BOT_MODE_NONE );
-	for _,npcTarget in pairs( tableNearbyEnemyHeroes )
-	do
-		local targetloc = npcTarget:GetLocation() --  utils.GetXUnitsInFront( npcTarget, 65)
-		if ( utils.isSkillPathClearOfUnits( npcBot, targetloc, 125) ) 
-		then
-			return BOT_ACTION_DESIRE_MODERATE, targetloc
-		end
-	end
-]]
-
+	
 	return BOT_ACTION_DESIRE_NONE;
 
 end
@@ -428,7 +415,7 @@ function ConsiderForceEnemy()
 	if npcTarget ~= nil and tower ~= nil then
 		if ( GetUnitToUnitDistance( npcTarget, tower ) < 1250 ) 
 		then
-			if(utils.IsFacingEntity( npcTarget, tower, 15 )) then
+			if(npcTarget:IsFacingEntity( tower, 15 )) then
 
 				return BOT_ACTION_DESIRE_MODERATE, npcTarget;
 			end

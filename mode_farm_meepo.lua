@@ -13,7 +13,7 @@ local state = STATE_IDLE
 local npcBot = GetBot()
 local player = npcBot:GetPlayer()
 local team = GetTeam()
-local level = utils.GetHeroLevel()
+local level = npcBot:GetHeroLevel()
 local clone = -1
 jungleStatus.NewJungle()
 local campToFarm = nil
@@ -30,9 +30,9 @@ function GetDesire()
 	--utils.print_r(testtt)
 	--print(assert(inspect.inspect(testtt)))
 	local desireMultiplier = 1
-	level = utils.GetHeroLevel()
-	min = math.floor(DotaTime() / 60)
-	sec = DotaTime() % 60
+	local level = npcBot:GetHeroLevel()
+	local min = math.floor(DotaTime() / 60)
+	local sec = DotaTime() % 60
 	local camplvl = CAMP_EASY
 
 	--set clone#
@@ -82,13 +82,26 @@ function GetDesire()
 		end
 	end
 
-	if npcBot:GetHealth() < (npcBot:GetMaxHealth() * .25) then
+	if npcBot:GetHealth() < (npcBot:GetMaxHealth() * .2) then
 		return BOT_MODE_DESIRE_NONE
+	end
+
+	-- get clone to stack early
+	if level < 5 then
+		if min % 2 == 0 and sec > 40 then
+			if clone == 1 then
+				return BOT_MODE_DESIRE_HIGH
+			else
+				return BOT_MODE_DESIRE_NONE
+			end
+		else
+			return BOT_MODE_DESIRE_NONE
+		end
 	end
 
 	-- get the main in the jungle for shield benefit at low lvl
 	-- then move the main to start roaming later
-	if level > 2 and level < 11 then
+	if level > 4 and level < 11 then
 		if clone == 1 then
 			--print("I'm the lane bitch")
 			return BOT_MODE_DESIRE_NONE
@@ -148,7 +161,7 @@ function Think()
 			campToFarm = { [VECTOR] = utils.tableRuneSpawns[team][1] }
 			state = STATE_IDLE
 		else
-			campToStack = utils.NearestNeutralCamp( npcBot, jungleStatus.GetJungle(team))
+			campToStack = npcBot:GetNearestNeutrals( jungleStatus.GetJungle(team))
 			state = STATE_MOVING_TOSTACK
 		end
 	end
@@ -168,7 +181,7 @@ function Think()
 				end
 			end
 			if campsICanHandle ~= nil then
-				campToFarm = utils.NearestNeutralCamp( npcBot, campsICanHandle)
+				campToFarm = npcBot:GetNearestNeutrals(campsICanHandle)
 			end
 		end
 		--print("campToFarm:"..campToFarm)

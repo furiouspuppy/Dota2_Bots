@@ -17,8 +17,7 @@ castForceEnemyDesire = 0;
 function AbilityUsageThink()
 
 	local npcBot = GetBot();
-	DebugDrawCircle(Vector(npcBot:GetLocation()[1],npcBot:GetLocation()[2], npcBot:GetGroundHeight()), 20, 0, 255, 0);
-	--DebugDrawLine( Vector(npcBot:GetLocation()[1],npcBot:GetLocation()[2], npcBot:GetGroundHeight()), Vector(utils.GetXUnitsInFront(npcBot, 300)[1],utils.GetXUnitsInFront(npcBot, 300)[2], npcBot:GetGroundHeight()), 0, 255, 0 )
+
 	-- Check if we're already using an ability
 	if ( npcBot:IsUsingAbility() ) then return end;
 
@@ -149,40 +148,6 @@ function ConsiderIllusoryOrb()
 	local nRadius = abilityOrb:GetSpecialValueInt( "radius" );
 	local nCastRange = abilityOrb:GetCastRange();
 	local nDamage = abilityOrb:GetAbilityDamage();
-
-	--------------------------------------
-	-- Global high-priorty usage
-	--------------------------------------
-
-	-- Check for a channeling enemy
-	--[[local tableNearbyEnemyHeroes = npcBot:GetNearbyHeroes( nCastRange + nRadius + 200, true, BOT_MODE_NONE );
-	for _,npcEnemy in pairs( tableNearbyEnemyHeroes )
-	do
-		if ( npcEnemy:IsChanneling() ) 
-		then
-			return BOT_ACTION_DESIRE_HIGH, npcEnemy:GetLocation();
-		end
-	end]]
-
-	--------------------------------------
-	-- Mode based usage
-	--------------------------------------
-
-	-- If we're seriously retreating, see if we can land a stun on someone who's damaged us recently
-	--[[if ( npcBot:GetActiveMode() == BOT_MODE_RETREAT and npcBot:GetActiveModeDesire() >= BOT_MODE_DESIRE_HIGH ) 
-	then
-		local tableNearbyEnemyHeroes = npcBot:GetNearbyHeroes( nCastRange + nRadius + 200, true, BOT_MODE_NONE );
-		for _,npcEnemy in pairs( tableNearbyEnemyHeroes )
-		do
-			if ( npcBot:WasRecentlyDamagedByHero( npcEnemy, 2.0 ) ) 
-			then
-				if ( CanCastLightStrikeArrayOnTarget( npcEnemy ) ) 
-				then
-					return BOT_ACTION_DESIRE_MODERATE, npcEnemy:GetLocation();
-				end
-			end
-		end
-	end]]
 
 	-- If we're going after someone
 	if ( npcBot:GetActiveMode() == BOT_MODE_ROAM or
@@ -437,8 +402,8 @@ function ConsiderDreamCoil()
 		for _,npcTarget in pairs(tableNearbyEnemyHeroes) do
 			if ( GetUnitToUnitDistance( npcTarget, tower ) < 1100 ) 
 			then
-				if(utils.IsFacingEntity( npcTarget, tower, 15 ) and npcTarget:HasModifier("modifier_puck_coiled") ) then
-					return BOT_ACTION_DESIRE_MODERATE, utils.GetXUnitsTowardsLocation(npcBot:GetLocation(), npcTarget:GetLocation(), nCastRange - 1);
+				if(npcTarget:IsFacingUnit( tower, 15 ) and npcTarget:HasModifier("modifier_puck_coiled") ) then
+					return BOT_ACTION_DESIRE_MODERATE, npcBot:GetXUnitsTowardsLocation( npcTarget:GetLocation(), nCastRange - 1);
 				end
 			end
 		end
@@ -503,7 +468,7 @@ function ConsiderForceEnemy()
 		for _,npcTarget in pairs(tableNearbyEnemyHeroes) do
 			if ( GetUnitToUnitDistance( npcTarget, tower ) < 1100 ) 
 			then
-				if(utils.IsFacingEntity( npcTarget, tower, 15 ) and npcTarget:HasModifier("modifier_puck_coiled") ) then
+				if(npcTarget:IsFacingEntity( tower, 15 ) and npcTarget:HasModifier("modifier_puck_coiled") ) then
 					return BOT_ACTION_DESIRE_MODERATE, npcTarget;
 				end
 			end

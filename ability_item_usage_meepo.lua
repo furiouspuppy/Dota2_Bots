@@ -12,6 +12,7 @@ end
 castNetDesire = 0;
 castPoofDesire = 0;
 castBlinkInitDesire = 0; 
+castTalonDesire = 0;
 min = 0
 sec = 0
 ----------------------------------------------------------------------------------------------------
@@ -43,11 +44,15 @@ function AbilityUsageThink()
 	abilityNet = npcBot:GetAbilityByName( "meepo_earthbind" );
 	abilityPoof = npcBot:GetAbilityByName( "meepo_poof" );
 	itemBlink = "item_blink";
+	itemTalon = "item_iron_talon";
 	for i=0, 5 do
 		if(npcBot:GetItemInSlot(i) ~= nil) then
 			local _item = npcBot:GetItemInSlot(i):GetName()
 			if(_item == itemBlink) then
 				itemBlink = npcBot:GetItemInSlot(i);
+			end
+			if(_item == itemTalon) then
+				itemTalon = npcBot:GetItemInSlot(i);
 			end
 		end
 	end
@@ -57,6 +62,7 @@ function AbilityUsageThink()
 	castNetDesire, castNetTarget = ConsiderEarthBind();
 	castPoofDesire, castPoofTarget = ConsiderPoof();
 	castBlinkInitDesire, castBlinkInitTarget = ConsiderBlinkInit();
+	castTalonDesire, castTalonTarget = ConsiderTalon();
 
 	local highestDesire = castNetDesire;
 	local desiredSkill = 1;
@@ -73,6 +79,12 @@ function AbilityUsageThink()
 			desiredSkill = 3;
 	end
 
+	if ( castTalonDesire > highestDesire) 
+		then
+			highestDesire = castTalonDesire;
+			desiredSkill = 4;
+	end
+
 	if highestDesire == 0 then return;
     elseif desiredSkill == 1 then 
 		npcBot:Action_UseAbilityOnLocation( abilityNet, castNetTarget );
@@ -80,6 +92,8 @@ function AbilityUsageThink()
 		npcBot:Action_UseAbilityOnEntity( abilityPoof, castPoofTarget );
     elseif desiredSkill == 3 then 
 		performBlinkInit( castBlinkInitTarget );
+    elseif desiredSkill == 4 then 
+		npcBot:Action_UseAbilityOnEntity( itemTalon, castTalonTarget );
 	end	
 end
 
@@ -125,7 +139,7 @@ function ConsiderEarthBind()
 				if ( CanCastEarthBindOnTarget( npcTarget ) ) 
 				then
 				--print("retreat Net")
-					return BOT_ACTION_DESIRE_MODERATE, utils.GetXUnitsInFront(npcTarget, 100);
+					return BOT_ACTION_DESIRE_MODERATE, npcTarget:GetXUnitsInFront(100);
 				end
 			end
 		end
@@ -176,7 +190,7 @@ function ConsiderEarthBind()
 			if ( CanCastEarthBindOnTarget( npcTarget ) and GetUnitToUnitDistance( npcBot, npcTarget ) < 160)
 			then
 			--print("MeepMeep Net")
-				return BOT_ACTION_DESIRE_MODERATE, utils.GetXUnitsInFront(npcTarget, 100);
+				return BOT_ACTION_DESIRE_MODERATE, npcTarget:GetXUnitsInFront(100);
 			end
 		end
 	end
@@ -326,6 +340,34 @@ function performBlinkInit( castBlinkInitTarget )
 	if( itemBlink ~= "item_blink" and itemBlink:IsFullyCastable()) then
 		npcBot:Action_UseAbilityOnLocation( itemBlink, castBlinkInitTarget);
 	end
+end
+
+----------------------------------------------------------------------------------------------------
+
+function ConsiderTalon()
+	local npcBot = GetBot();
+
+	-- Make sure it's castable
+	if (  itemTalon == "item_iron_talon" or not itemTalon:IsFullyCastable() ) then 
+		return BOT_ACTION_DESIRE_NONE;
+	end;
+
+	if npcBot:GetActiveMode() == BOT_MODE_FARM then
+		local tableNearbyCreeps = npcBot:GetNearbyCreeps( 300, true ) 
+		local health = 0
+		local highHealthTarget = 0
+		for _,v in pairs(tableNearbyCreeps) do
+			if v:GetHealth() > health then
+				health = v:GetHealth()
+				highHealthTarget = v
+			end
+		end
+		if health > 0 then
+			return BOT_ACTION_DESIRE_HIGH, highHealthTarget
+		end
+	end
+
+	return BOT_ACTION_DESIRE_NONE
 end
 
 ----------------------------------------------------------------------------------------------------
