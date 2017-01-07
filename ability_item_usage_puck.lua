@@ -4,13 +4,13 @@ local enemyStatus = require( "bots".."/enemy_status" )
 ----------------------------------------------------------------------------------------------------
 
 
-castPhaseDesire = 0;
-castJauntDesire = 0;
-castCoilDesire = 0;
-castSilenceDesire = 0;
-castOrbDesire = 0;
-castBlinkInitDesire = 0; 
-castForceEnemyDesire = 0;
+local castPhaseDesire = 0;
+local castJauntDesire = 0;
+local castCoilDesire = 0;
+local castSilenceDesire = 0;
+local castOrbDesire = 0;
+local castBlinkInitDesire = 0; 
+local castForceEnemyDesire = 0;
 
 
 

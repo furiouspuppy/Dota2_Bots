@@ -9,6 +9,7 @@ local teamStatus = require( "bots".."/team_status" )
 local min = 0
 local sec = 0
 local rune = 0
+local skipRune = false
 local runeCalled = false
 local waiting = false
 local callTime = 0
@@ -17,27 +18,6 @@ function GetDesire()
 	local npcBot = GetBot()
 	min = math.floor(DotaTime() / 60)
 	sec = DotaTime() % 60
-
-	--rune time is over back to business
-	if min % 2 == 0 and runeCalled then
-		runeCalled = false
-		waiting = false
-		teamStatus.ClearCalledRunes()
-	end 
-
-	--we've called one go get it
-	if runeCalled then
-		return BOT_MODE_DESIRE_HIGH
-	end
-
-		--don't kill yourself for a rune
-	if (npcBot:GetActiveMode() == BOT_MODE_RETREAT or
-		npcBot:GetActiveMode() == BOT_MODE_EVASIVE_MANEUVERS or
-		npcBot:GetActiveMode() == BOT_MODE_DEFEND_ALLY or
-		npcBot:GetActiveMode() == BOT_MODE_ATTACKING)
-	then
-		return BOT_MODE_DESIRE_NONE
-	end
 
 		-- grab a rune if we walk by it
 	if (GetUnitToLocationDistance( npcBot , RAD_BOUNTY_RUNE_SAFE) < 1000 and
@@ -72,6 +52,35 @@ function GetDesire()
     	return BOT_MODE_DESIRE_VERYHIGH
     end
 
+	if skipRune then
+		return BOT_MODE_DESIRE_NONE
+	end
+
+	if min % 2 == 0 then
+		skipRune = false
+	end
+
+	--rune time is over back to business
+	if min % 2 == 0 and runeCalled then
+		runeCalled = false
+		waiting = false
+		teamStatus.ClearCalledRunes()
+	end 
+
+	--we've called one go get it
+	if runeCalled then
+		return BOT_MODE_DESIRE_HIGH
+	end
+
+		--don't kill yourself for a rune
+	if (npcBot:GetActiveMode() == BOT_MODE_RETREAT or
+		npcBot:GetActiveMode() == BOT_MODE_EVASIVE_MANEUVERS or
+		npcBot:GetActiveMode() == BOT_MODE_DEFEND_ALLY or
+		npcBot:GetActiveMode() == BOT_MODE_ATTACKING)
+	then
+		return BOT_MODE_DESIRE_NONE
+	end
+
     --[[
     its rune time, find your closest rune and call it
     a timer runs based off your distance to rune and calls it
@@ -80,6 +89,7 @@ function GetDesire()
 	if min % 2 == 1 and sec > 45 
 	then
 		local options = {}
+		
 
 		for _,v in pairs(utils.tableRuneSpawns[GetTeam()]) do
 			table.insert(options, v)
@@ -115,7 +125,11 @@ end
 ----------------------------------------------------------------------------------------------------
 
 function OnStart()
-	
+	local skip = RandomInt( 1, 10 )
+	print(skip)
+	if skip > 5 then
+		skipRune = true
+	end
 end
 
 ----------------------------------------------------------------------------------------------------

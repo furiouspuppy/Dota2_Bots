@@ -2,7 +2,7 @@
 requiredHeroes = {
   --'npc_dota_hero_rattletrap'
 	'npc_dota_hero_meepo',
-	'npc_dota_hero_puck',
+	--'npc_dota_hero_puck',
 	--'npc_dota_hero_lina',
 };
 
@@ -26,6 +26,7 @@ allBotHeroes = {
 		'npc_dota_hero_lina',
 		'npc_dota_hero_lion',
 		'npc_dota_hero_luna',
+        'npc_dota_hero_meepo',
 		'npc_dota_hero_necrolyte',
 		'npc_dota_hero_nevermore',
 		'npc_dota_hero_omniknight',
@@ -57,8 +58,8 @@ quickMode = true;
 -- To find appropriate values, start a game, open a console, and observe which slots are
 -- being used by which players/teams. maxPlayerID shoulud just be the highest-numbered
 -- slot in use.
-radiantSlots = {2};
-direSlots = {7};
+radiantSlots = 0--{2};
+direSlots = 0--{7};
 maxPlayerID = 11;
 
 -- TODO
@@ -68,41 +69,18 @@ maxPlayerID = 11;
 -- 5. add some jitter, so the bots pick at slightly more random times
 -- 6. reimplement farm priority based system
 function Think()
-  local startPickTime = -70;
-  local timePerPick = 1;
-
-  if not quickMode and (DotaTime() < startPickTime) then
-    return;
-  end
-
   picks = GetPicks();
-  local pickCount = 0;
-  for k,v in pairs(picks) do -- have to iterate here, as conditions are not right to use #
-    pickCount = pickCount + 1;
-  end
-  local pickTime = startPickTime + (timePerPick * pickCount);
-
-  if not quickMode and  (DotaTime() < pickTime) then
-    return;
-  end
-
-	if ( GetTeam() == TEAM_RADIANT and IsTeamsTurnToPick(TEAM_RADIANT)) then
-		for i, potentialSlot in pairs(radiantSlots) do
-      -- print("evaluating slot for radiant ", potentialSlot);
-			if (IsSlotEmpty(potentialSlot)) then
-				PickHero(potentialSlot);
-  			return;
-			end
-		end
-	elseif ( GetTeam() == TEAM_DIRE and IsTeamsTurnToPick(TEAM_DIRE)) then
-		for i, potentialSlot in pairs(direSlots) do
-      -- print("evaluating slot for dire ", potentialSlot);
-			if (IsSlotEmpty(potentialSlot)) then
-				PickHero(potentialSlot);
-  			return;
-			end
-		end
-	end
+    if not IsPlayerBot(0) then
+        print("player")
+        hero = GetRandomHero()
+        SelectHero(5, hero);
+        return
+    else
+        hero = GetRandomHero()
+        SelectHero(2, hero);
+        hero = GetRandomHero()
+        SelectHero(7, hero);
+    end
 end
 
 function IsTeamsTurnToPick(team)

@@ -25,12 +25,12 @@ local inspect = require("bots" .. "/inspect")
 	local test = GetBot():GetNearbyHeroes( 35000, true, BOT_MODE_NONE )
 	print(assert(inspect.inspect(test)))
 	]]
-castbaDesire = 0;
-castcogsDesire = 0;
-casthookDesire = 0;
-castflareDesire = 0;
-castBlinkInitDesire = 0; 
-castForceEnemyDesire = 0;
+local castbaDesire = 0;
+local castcogsDesire = 0;
+local casthookDesire = 0;
+local castflareDesire = 0;
+local castBlinkInitDesire = 0; 
+local castForceEnemyDesire = 0;
 
 function AbilityUsageThink()
 	local npcBot = GetBot();

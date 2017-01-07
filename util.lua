@@ -77,6 +77,13 @@ end
 
 ----------------------------------------------------------------------------------------------------
 
+function CDOTA_Bot_Script:GetLane()
+    local lane = LANE_MID
+    return lane
+end
+
+----------------------------------------------------------------------------------------------------
+
 -- util function for printing a table
 function utilsModule.print_r ( t )  
     local print_r_cache={}

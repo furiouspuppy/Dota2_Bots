@@ -9,12 +9,12 @@ else
 end
 
 
-castNetDesire = 0;
-castPoofDesire = 0;
-castBlinkInitDesire = 0; 
-castTalonDesire = 0;
-min = 0
-sec = 0
+local castNetDesire = 0;
+local castPoofDesire = 0;
+local castBlinkInitDesire = 0; 
+local castTalonDesire = 0;
+local min = 0
+local sec = 0
 ----------------------------------------------------------------------------------------------------
 
 --mess should keep courier clear?
