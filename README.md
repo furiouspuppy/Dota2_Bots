@@ -3,10 +3,16 @@
 With 7.00 came a long awaited supported AI for writing our own bots, I play a LOT of bot games with friends so I couldn't resist taking a crack at it.  Gives me an excuse to learn LUA as well.
 
 ##Updates!
-Added code for rune collection on all bots, including default bots.
+Added a 50% chance for bots to ignore their called rune.  Feels good but needs iteration
+
+Changed hero_selection.lua Now works for 5v5 All Pick with players in any slot(or none)
+
+hero_selection1.lua remains for 1v1 option
+
+You can now force bots out of lane by standing near T1 tower before 0:15 into game
 
 ##Current Bots Under Development
-Meepo - playable/rough - Laning is pretty much default for 1 clone and the rest jungle/steal runes/over commit.  TODO's Fights,Skill decisions,more efficient rune/jungle,escape
+Meepo - playable - Laning is pretty much default for 1 clone and the rest jungle/gather runes.  
 
 Puck - playable/rough - TODO's Orb Tracking for jaunt
 
@@ -15,26 +21,27 @@ Clockwerk - rough - TODO's need fight awareness and much skill work
 ##Current General Modes Under Development
 Jungling - Team wide jungle camp tracking, easy to use vectors
 
-Runes - Bots can 'call' runes to be theirs and go and collect them.  Will also grab any rune it walks by that is available.  
+Runes - Bots can 'call' runes to be theirs and go and collect them.  Will also grab any rune it walks by that is available. Has a 50% chance they will ignore their called rune, this was a feel decision because every rune being fought for on every cycle just wasn't right. 
 
 Item Purchase - Set up for easily adding a new bot with just an item/skill build list
 
-Utilities - Ya know... Stuff!
+Utilities - Now adds bot scope functions to CDOTA_bot_script to call using npcBot:func() left other functions in utilities module to be used with require()
 
 ##How To Install
+
+UPDATE: Workshop is live you can now create a lobby and use workshop too to find WIP- Bots by FuriousPuppy instead of the following.
 
 1. [Download](https://github.com/furiouspuppy/Dota2_Bots/archive/master.zip) the latest version
 2. Unzip and rename the folder to **"bots"**
 3. Move it to **"C:\Program Files (x86)\Steam\steamapps\common\dota 2 beta\game\dota\scripts\vscripts\**"
-4. In the bots folder, rename one of the hero_selection-****.lua to hero_selection.lua 
-5. Start dota -> Create Lobby -> Click Edit in lobby settings
-6. Server Location: Local Host, Bot Settings/Radient Bots and Dire Bots: Local Dev Script
+4. Server Location: Local Host, Bot Settings/Radient Bots and Dire Bots: Local Dev Script
 
 Available hero_selections:
 
-hero_selection1 = 1v1 solo mid with just bots
+default hero_selection = 5v5 all pick tested with all bots or 1-2 players but should work for any # of players
 
-hero_selection5 = 5v5 all pick tested with all bots or 1-2 players but should work for any # of players
+hero_selection1 = 1v1 solo mid with just bots - rename to hero_selection to use
+
 
 ##Important Info
 I am playing within the default modes that we have the option of overwriting for now.  This has it's limitations and my bots still fall victim to the decision making of the default bot code quite often.  Pretty sure Meepo thinks he's Sterling Archer... only there are 5 of him... 
