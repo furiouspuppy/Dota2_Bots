@@ -1,4 +1,4 @@
-local utils = require("bots" .. "/util")
+local utils = require(GetScriptDirectory() .. "/util")
 
 -- mandate that the bots will pick these heroes - for testing purposes
 requiredHeroes = {

@@ -1,6 +1,6 @@
-local utils = require("bots" .. "/util")
-local inspect = require("bots" .. "/inspect")
-local enemyStatus = require( "bots".."/enemy_status" )
+local utils = require(GetScriptDirectory() .. "/util")
+local inspect = require(GetScriptDirectory() .. "/inspect")
+local enemyStatus = require(GetScriptDirectory() .."/enemy_status" )
 ----------------------------------------------------------------------------------------------------
 
 

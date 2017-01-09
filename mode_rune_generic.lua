@@ -2,8 +2,8 @@
 	return ( 0.0);
 end
 ]]
-local utils = require("bots" .. "/util")
-local teamStatus = require( "bots".."/team_status" )
+local utils = require(GetScriptDirectory() .. "/util")
+local teamStatus = require( GetScriptDirectory() .."/team_status" )
 ----------------------------------------------------------------------------------------------------
 
 local min = 0
@@ -126,7 +126,7 @@ end
 
 function OnStart()
 	local skip = RandomInt( 1, 10 )
-	print(skip)
+	--print(skip)
 	if skip > 5 then
 		skipRune = true
 	end

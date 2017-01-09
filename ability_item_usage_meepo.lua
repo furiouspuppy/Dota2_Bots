@@ -1,5 +1,5 @@
-local utils = require("bots" .. "/util")
-local meepoStatus = require( "bots".."/meepo_status" )
+local utils = require(GetScriptDirectory() .. "/util")
+local meepoStatus = require(GetScriptDirectory() .."/meepo_status" )
 ----------------------------------------------------------------------------------------------------
 
 if not GetBot():IsIllusion() then

@@ -1,6 +1,6 @@
 local utilsModule = {}
 
-local vec = require("bots".."/Vectors")
+local vec = require(GetScriptDirectory() .."/Vectors")
 utilsModule.tableNeutralCamps = vec["tableNeutralCamps"]  -- constant - shouldn't be modified runtime use X.jungle instead
 utilsModule.tableRuneSpawns = vec["tableRuneSpawns"]
 

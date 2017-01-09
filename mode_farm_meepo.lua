@@ -1,7 +1,7 @@
-local utils = require("bots" .. "/util")
-local jungleStatus = require( "bots".."/jungle_status" )
+local utils = require(GetScriptDirectory() .. "/util")
+local jungleStatus = require(GetScriptDirectory() .."/jungle_status" )
 --print("Farm mode instantiated")
-local inspect = require("bots" .. "/inspect")
+local inspect = require(GetScriptDirectory() .. "/inspect")
 ----------------------------------------------------------------------------------------------------
 
 STATE_IDLE = "STATE_IDLE"

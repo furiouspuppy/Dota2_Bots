@@ -1,7 +1,7 @@
-local utils = require("bots" .. "/util")
+local utils = require(GetScriptDirectory() .. "/util")
 local build ="NOT IMPLEMENTED"
 if string.match(GetBot():GetUnitName(), "hero") then
-    build = require("bots" .. "/builds/item_build_" .. string.gsub(GetBot():GetUnitName(), "npc_dota_hero_", ""))
+    build = require(GetScriptDirectory() .. "/builds/item_build_" .. string.gsub(GetBot():GetUnitName(), "npc_dota_hero_", ""))
 end
 if build == "NOT IMPLEMENTED" then return end
 ----------------------------------------------------------------------------------------------------
@@ -198,6 +198,12 @@ for i=0, 15 do
             table.insert(currentItems, "item_blade_of_alacrity")
             table.insert(currentItems, "item_boots_of_elves")
             table.insert(currentItems, "item_recipe_yasha")
+        elseif(_item == "item_manta")then
+            table.insert(currentItems, "item_blade_of_alacrity")
+            table.insert(currentItems, "item_boots_of_elves")
+            table.insert(currentItems, "item_recipe_yasha")
+            table.insert(currentItems, "item_ultimate_orb")
+            table.insert(currentItems, "item_recipe_manta")
         elseif(_item == "item_hood_of_defiance")then
             table.insert(currentItems, "item_ring_of_health")
             table.insert(currentItems, "item_cloak")
@@ -210,6 +216,30 @@ for i=0, 15 do
             table.insert(currentItems, "item_stout_shield")
             table.insert(currentItems, "item_ring_of_health")
             table.insert(currentItems, "item_vitality_booster")
+        elseif(_item == "item_invis_sword")then --shadowblade
+            table.insert(currentItems, "item_shadow_amulet")
+            table.insert(currentItems, "item_claymore")
+        elseif(_item == "item_silver_edge")then --shadowblade
+            table.insert(currentItems, "item_shadow_amulet")
+            table.insert(currentItems, "item_claymore")
+            table.insert(currentItems, "item_ultimate_orb")
+            table.insert(currentItems, "item_recipe_silver_edge")
+        elseif(_item == "item_echo_sabre")then --shadowblade
+            table.insert(currentItems, "item_quarterstaff")
+            table.insert(currentItems, "item_sobi_mask")
+            table.insert(currentItems, "item_robe")
+        elseif(_item == "item_basher")then --shadowblade
+            table.insert(currentItems, "item_belt_of_strength")
+            table.insert(currentItems, "item_javelin")
+            table.insert(currentItems, "item_recipe_basher")
+        elseif(_item == "item_abyssal_blade")then --shadowblade
+            table.insert(currentItems, "item_stout_shield")
+            table.insert(currentItems, "item_ring_of_health")
+            table.insert(currentItems, "item_vitality_booster")
+            table.insert(currentItems, "item_belt_of_strength")
+            table.insert(currentItems, "item_javelin")
+            table.insert(currentItems, "item_recipe_basher")
+            table.insert(currentItems, "item_recipe_abyssal_blade")
         else
             table.insert(currentItems, npcBot:GetItemInSlot(i):GetName())
         end

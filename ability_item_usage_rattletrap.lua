@@ -1,7 +1,7 @@
-local utils = require("bots" .. "/util")
-local enemyStatus = require( "bots".."/enemy_status" )
+local utils = require(GetScriptDirectory() .. "/util")
+local enemyStatus = require(GetScriptDirectory() .."/enemy_status" )
 
-local inspect = require("bots" .. "/inspect")
+local inspect = require(GetScriptDirectory() .. "/inspect")
 ----------------------------------------------------------------------------------------------------
 --rattletrap_battery_assault
 --rattletrap_hookshot
@@ -223,7 +223,7 @@ function ConsiderHook()
 
 	-- Make sure it's castable
 	if ( not abilityHook:IsFullyCastable() ) then 
-		return BOT_ACTION_DESIRE_NONE;
+		return BOT_ACTION_DESIRE_NONE, 0;
 	end
 
 
@@ -265,7 +265,7 @@ function ConsiderHook()
 		end
 	end
 	
-	return BOT_ACTION_DESIRE_NONE;
+	return BOT_ACTION_DESIRE_NONE, 0;
 
 end
 
