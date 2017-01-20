@@ -56,8 +56,8 @@ local ABILITY8  = "special_bonus_unique_meepo"
 X["skills"] = {
     SKILL_W,    SKILL_Q,    SKILL_R,    SKILL_W,    SKILL_W,
     SKILL_E,    SKILL_W,    SKILL_E,    SKILL_E,    SKILL_R,
-    SKILL_E,    SKILL_Q,    SKILL_Q,    SKILL_Q,    "-1",
-    "-1",       SKILL_R,    ABILITY2,   ABILITY3,   ABILITY6,
+    ABILITY1,   SKILL_E,    SKILL_Q,    SKILL_Q,    ABILITY3,
+    SKILL_Q,    SKILL_R,    "-1",   	"-1",   	ABILITY5,
     "-1",       "-1",       "-1",       "-1",       ABILITY7
 };
 

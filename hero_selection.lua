@@ -3,8 +3,8 @@ local utils = require(GetScriptDirectory() .. "/util")
 -- mandate that the bots will pick these heroes - for testing purposes
 requiredHeroes = {
     --'npc_dota_hero_rattletrap';
-    --'npc_dota_hero_puck';
     --'npc_dota_hero_meepo';
+    --'npc_dota_hero_puck';
     --'npc_dota_hero_monkey_king';
     --'npc_dota_hero_bane';
     --'npc_dota_hero_lina';
@@ -163,7 +163,11 @@ function GetRandomHero()
     selectedHeroes[hero] = true;
   end
 
-    hero = requiredHeroes[RandomInt(1, #requiredHeroes)];
+    --force required to dire
+    --if GetTeam() == 3 then
+        hero = requiredHeroes[RandomInt(1, #requiredHeroes)];
+    --end
+
     if (hero == nil) then
         hero = allBotHeroes[RandomInt(1, #allBotHeroes)];
     end

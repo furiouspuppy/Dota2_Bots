@@ -10,22 +10,26 @@ local castRevertFormDesire = 0;
 local castWukongDesire = 0;
 local min = 0
 local sec = 0
-----------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------
+local courierTime = 0
 
---mess should keep courier clear?
 function CourierUsageThink()
-	local npcBot = GetBot();
-	if (IsCourierAvailable() and 
-		npcBot:GetCourierValue( ) > 0 and
+	local npcBot = GetBot()
+
+	if (IsCourierAvailable() and
+		npcBot:DistanceFromFountain() < 9000 and 
+		DotaTime() > (courierTime + 5) and
+		(npcBot:GetCourierValue( ) > 0 or
+		npcBot:GetStashValue( ) > 0) and
 		npcBot:GetActiveMode() ~= BOT_MODE_ATTACK and
 		npcBot:GetActiveMode() ~= BOT_MODE_RETREAT and
 		npcBot:GetActiveMode() ~= BOT_MODE_EVASIVE_MANEUVERS and
 		npcBot:GetActiveMode() ~= BOT_MODE_DEFEND_ALLY)
 	then
 		npcBot:Action_CourierDeliver( )
+		courierTime = DotaTime()
 	end
 end
-
 ----------------------------------------------------------------------------------------------------
 
 function AbilityUsageThink()

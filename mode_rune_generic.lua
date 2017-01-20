@@ -19,6 +19,9 @@ function GetDesire()
 	min = math.floor(DotaTime() / 60)
 	sec = DotaTime() % 60
 
+	--TODO find a better place?
+	callTeamUpdate()
+
 		-- grab a rune if we walk by it
 	if (GetUnitToLocationDistance( npcBot , RAD_BOUNTY_RUNE_SAFE) < 1000 and
 		GetRuneStatus( RUNE_BOUNTY_1 ) == RUNE_STATUS_AVAILABLE )
@@ -69,7 +72,12 @@ function GetDesire()
 
 	--we've called one go get it
 	if runeCalled then
-		return BOT_MODE_DESIRE_HIGH
+		local tableNearbyEnemyHeroes = npcBot:GetNearbyHeroes(1300, true, BOT_MODE_NONE)
+
+		if #tableNearbyEnemyHeroes > 0 then
+			return BOT_MODE_LOW
+		end
+		return BOT_MODE_DESIRE_MODERATE
 	end
 
 		--don't kill yourself for a rune
@@ -116,7 +124,7 @@ function GetDesire()
 		end
 		teamStatus.CallRune(rune)
 		runeCalled = true
-		return BOT_MODE_DESIRE_HIGH 
+		return BOT_MODE_DESIRE_MODERATE
 	end
 
 	return BOT_MODE_DESIRE_NONE
@@ -142,6 +150,7 @@ end
 
 function Think()
 	local npcBot = GetBot()
+
 	-- grab a rune if we walk by it
 	if (GetUnitToLocationDistance( npcBot , RAD_BOUNTY_RUNE_SAFE) < 1000 and
 		GetRuneStatus( RUNE_BOUNTY_1 ) == RUNE_STATUS_AVAILABLE )
@@ -185,5 +194,35 @@ function Think()
 	   	npcBot:Action_MoveToLocation( rune )
 	else
 		print("rune error!")
+	end
+end
+
+function callTeamUpdate()
+	local npcBot = GetBot()
+
+	if GetBot():IsIllusion() then
+		return
+		--print("ILLUSION ALERT!")
+	end
+
+	--find a better place for this
+	if GetGameState() == GAME_STATE_GAME_IN_PROGRESS then 
+		teamStatus.UpdateTeamStatus()
+
+		--[[print(" ")
+		print(npcBot:GetUnitName() .. ": ")
+		print("	Friends:")
+		local friends = "	"
+		for _,v in pairs(npcBot.NearbyFriends) do
+			friends = friends .. ", " .. v:GetUnitName()
+		end
+		print(friends)
+		print("	Enemies:")
+		local enemies = "	"
+		for _,v in pairs(npcBot.NearbyEnemies) do
+			enemies = enemies .. ", " .. v:GetUnitName()
+		end
+		print(enemies)
+		print("------------------------------------------")]]
 	end
 end

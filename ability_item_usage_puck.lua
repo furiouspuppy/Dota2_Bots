@@ -1,8 +1,9 @@
 local utils = require(GetScriptDirectory() .. "/util")
 local inspect = require(GetScriptDirectory() .. "/inspect")
 local enemyStatus = require(GetScriptDirectory() .."/enemy_status" )
+local teamStatus = require(GetScriptDirectory() .."/team_status" )
+local inspect = require(GetScriptDirectory() .. "/inspect")
 ----------------------------------------------------------------------------------------------------
-
 
 local castPhaseDesire = 0;
 local castJauntDesire = 0;
@@ -12,12 +13,32 @@ local castOrbDesire = 0;
 local castBlinkInitDesire = 0; 
 local castForceEnemyDesire = 0;
 
+----------------------------------------------------------------------------------------------------
+local courierTime = 0
 
+function CourierUsageThink()
+	local npcBot = GetBot()
+
+	if (IsCourierAvailable() and
+		npcBot:DistanceFromFountain() < 9000 and 
+		DotaTime() > (courierTime + 5) and
+		(npcBot:GetCourierValue( ) > 0 or
+		npcBot:GetStashValue( ) > 0) and
+		npcBot:GetActiveMode() ~= BOT_MODE_ATTACK and
+		npcBot:GetActiveMode() ~= BOT_MODE_RETREAT and
+		npcBot:GetActiveMode() ~= BOT_MODE_EVASIVE_MANEUVERS and
+		npcBot:GetActiveMode() ~= BOT_MODE_DEFEND_ALLY)
+	then
+		npcBot:Action_CourierDeliver( )
+		courierTime = DotaTime()
+	end
+end
+----------------------------------------------------------------------------------------------------
 
 function AbilityUsageThink()
-
-	local npcBot = GetBot();
-
+local npcBot = GetBot();
+local sideOfMap = 0
+	--print(utils.GetLocationDanger(npcBot:GetLocation()))
 	-- Check if we're already using an ability
 	if ( npcBot:IsUsingAbility() ) then return end;
 
@@ -338,7 +359,7 @@ function ConsiderPhaseShift()
 	do
 
 		if(npcEnemy:GetAttackTarget() ~= nil) then 
-			print(npcEnemy:GetMaxHealth()) 
+			--print(npcEnemy:GetMaxHealth()) 
 			if ( npcEnemy:GetAttackTarget() == npcBot) 
 			then
 				return BOT_ACTION_DESIRE_MODERATE;

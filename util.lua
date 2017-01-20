@@ -1,9 +1,26 @@
 local utilsModule = {}
 
 local vec = require(GetScriptDirectory() .."/Vectors")
-utilsModule.tableNeutralCamps = vec["tableNeutralCamps"]  -- constant - shouldn't be modified runtime use X.jungle instead
-utilsModule.tableRuneSpawns = vec["tableRuneSpawns"]
+local BotData = require(GetScriptDirectory() .."/BotData")
 
+utilsModule["tableNeutralCamps"] = vec.tableNeutralCamps  -- constant - shouldn't be modified runtime use X.jungle instead
+utilsModule["tableRuneSpawns"] = vec.tableRuneSpawns
+utilsModule.Roles = BotData.Roles
+----------------------------------------------------------------------------------------------------
+
+CDOTA_Bot_Script.AttackPower = 0
+CDOTA_Bot_Script.MagicPower = 0
+CDOTA_Bot_Script.Role = 0
+CDOTA_Bot_Script.NeedsHelp = false
+CDOTA_Bot_Script.CanHelp = true
+CDOTA_Bot_Script.IsReady = false
+CDOTA_Bot_Script.IsFighting = false
+CDOTA_Bot_Script.LostCause = false
+CDOTA_Bot_Script.hasGlobal = false
+CDOTA_Bot_Script.missing = true
+CDOTA_Bot_Script.NearbyFriends = {}
+CDOTA_Bot_Script.NearbyEnemies = {}
+----------------------------------------------------------------------------------------------------
 
 function CDOTA_Bot_Script:GetForwardVector()
     local radians = self:GetFacing() * math.pi / 180
@@ -31,20 +48,6 @@ end
 
 function CDOTA_Bot_Script:GetXUnitsInFront( nUnits )
     return self:GetLocation() + self:GetForwardVector() * nUnits
-end
-
-----------------------------------------------------------------------------------------------------
-
---function to get current hero level
-function CDOTA_Bot_Script:GetHeroLevel()
-    local npcBot = GetBot();
-    local respawnTable = {8, 10, 12, 14, 16, 26, 28, 30, 32, 34, 36, 46, 48, 50, 52, 54, 56, 66, 70, 74, 78,  82, 86, 90, 100};
-    local nRespawnTime = npcBot:GetRespawnTime() +1 -- It gives 1 second lower values.
-    for k,v in pairs (respawnTable) do
-        if v == nRespawnTime then
-        return k
-        end
-    end
 end
 
 ----------------------------------------------------------------------------------------------------
@@ -77,15 +80,14 @@ end
 
 ----------------------------------------------------------------------------------------------------
 
-function CDOTA_Bot_Script:GetLane()
-    local lane = LANE_MID
-    return lane
+function CDOTA_Bot_Script:GetLocationDanger()
+    return utilsModule.GetLocationDanger(self:GetLocation())
 end
 
 ----------------------------------------------------------------------------------------------------
 
 -- util function for printing a table
-function utilsModule.print_r ( t )  
+function utilsModule.print_r(t)--print_r ( t )  
     local print_r_cache={}
     local function sub_print_r(t,indent)
         if (print_r_cache[tostring(t)]) then
@@ -136,6 +138,99 @@ function utilsModule.deepcopy(orig)
     return copy
 end
 
+----------------------------------------------------------------------------------------------------
+
+function utilsModule.GetLane( vLoc )
+    --local team = GetTeam()
+    local sideOfMap = 0
+
+    if vLoc.x + vLoc.y > 0 then --mostly true
+        sideOfMap = TEAM_DIRE
+    else
+        sideOfMap = TEAM_RADIANT
+    end
+    --print(sideOfMap)
+    local angleToMid = 0
+    if sideOfMap == TEAM_RADIANT then
+        vToLoc = vLoc - LANE_HEAD_RAD
+        angleToMid = vToLoc:Dot(LANE_MID_RAD) / (#vToLoc * #LANE_MID_RAD)
+    else
+        vToLoc = vLoc - LANE_HEAD_DIRE
+        --print(tostring(vToLoc))
+        --print(tostring(#vToLoc) .. ":".. #LANE_MID_DIRE)
+        angleToMid = vToLoc:Dot(LANE_MID_DIRE) / (#vToLoc * #LANE_MID_DIRE)
+    end
+    if angleToMid > 90 then angleToMid = angleToMid - 180 end
+    angleToMid = math.acos(math.abs(angleToMid)) * 180 / math.pi
+    --print(sideOfMap .. ":" .. angleToMid)
+    if angleToMid < 7.5 then return LANE_MID end
+    if angleToMid < 38 then return LANE_NONE end
+
+    if vLoc.x - vLoc.y < 0 then 
+        return LANE_TOP
+    else 
+        return LANE_BOT 
+    end
+
+end
+----------------------------------------------------------------------------------------------------
+-- attempt to assess a locations current danger
+function utilsModule.GetLocationDanger( vLoc )
+    local npcBot = GetBot()
+    --local team = GetTeam()
+    local danger = 0
+    lane = utilsModule.GetLane( vLoc )
+    
+    --range is 0 - 1
+    local toRosh = vLoc - ROSHAN
+    if #toRosh < 500 then
+        danger = danger + 1
+    end
+
+    --range is 0 - 1 out of lane or 2 if you are base seiged
+    --range in lane is 0 - ~3
+    if lane == LANE_NONE then
+        local lanes = (GetLaneFrontAmount( GetTeam(), LANE_TOP, true ) +
+                        GetLaneFrontAmount( GetTeam(), LANE_MID, true ) +
+                        GetLaneFrontAmount( GetTeam(), LANE_BOT, true ))
+        if lanes == 0 then danger = danger + 2 end
+        danger = danger + (1 - (lanes / 3))
+    else
+
+        local laneFront = 0
+        if lane == LANE_BOT then
+            laneFront = GetLocationAlongLane( LANE_BOT, GetLaneFrontAmount( GetTeam(), LANE_BOT, true ) )
+        elseif lane == LANE_TOP then
+            laneFront = GetLocationAlongLane( LANE_TOP, GetLaneFrontAmount( GetTeam(), LANE_TOP, true ) )
+        else
+            laneFront = GetLocationAlongLane( LANE_MID, GetLaneFrontAmount( GetTeam(), LANE_MID, true ) )
+        end
+        --DebugDrawCircle(Vector(laneFront.x, laneFront.y, 300), 25,  0, 255, 0)
+        --print(tostring(laneFront))
+        local laneDistance = laneFront - GetAncient(GetTeam()):GetLocation()
+        local locDistance = vLoc - GetAncient(GetTeam()):GetLocation()
+        danger = danger + (math.max((#locDistance - #laneDistance) / 3500, 0))
+    end    
+
+    for i=0,10 do
+        local tower = GetTower(GetTeam(), i)
+        --print("team " ..GetTeam().."  tower " .. i)
+        if tower and #(npcBot:GetLocation() - tower:GetLocation()) < 1000 then
+            danger = danger - 3
+        end
+
+        if GetTeam() - 2 then -- get enemy team (dire - radiant = true)
+            tower = GetTower(TEAM_RADIANT, i)
+        else
+            tower = GetTower(TEAM_DIRE, i)
+        end
+        if tower and #(npcBot:GetLocation() - tower:GetLocation()) < 1000 then
+            danger = danger * 3
+        end
+    end
+
+    return danger
+end
 ----------------------------------------------------------------------------------------------------
 
 return utilsModule

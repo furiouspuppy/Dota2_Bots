@@ -1,9 +1,11 @@
 local utils = require(GetScriptDirectory() .. "/util")
 local meepoStatus = require(GetScriptDirectory() .."/meepo_status" )
+local teamStatus = require( "bots".."/team_status" )
 ----------------------------------------------------------------------------------------------------
 
 if not GetBot():IsIllusion() then
 	meepoStatus.AddMeepo(GetBot())
+	teamStatus.AddHero(GetBot())
 else
 	print("ILLUSION ALERT!")
 end
@@ -16,25 +18,30 @@ local castTalonDesire = 0;
 local min = 0
 local sec = 0
 ----------------------------------------------------------------------------------------------------
+local courierTime = 0
 
---mess should keep courier clear?
 function CourierUsageThink()
-	local npcBot = GetBot();
-	if (IsCourierAvailable() and 
-		npcBot:GetCourierValue( ) > 0 and
+	local npcBot = GetBot()
+
+	if (IsCourierAvailable() and
+		npcBot:DistanceFromFountain() < 9000 and 
+		DotaTime() > (courierTime + 5) and
+		(npcBot:GetCourierValue( ) > 0 or
+		npcBot:GetStashValue( ) > 0) and
 		npcBot:GetActiveMode() ~= BOT_MODE_ATTACK and
 		npcBot:GetActiveMode() ~= BOT_MODE_RETREAT and
 		npcBot:GetActiveMode() ~= BOT_MODE_EVASIVE_MANEUVERS and
 		npcBot:GetActiveMode() ~= BOT_MODE_DEFEND_ALLY)
 	then
 		npcBot:Action_CourierDeliver( )
+		courierTime = DotaTime()
 	end
 end
-
 ----------------------------------------------------------------------------------------------------
 
 function AbilityUsageThink()
 	local npcBot = GetBot();
+
 	min = math.floor(DotaTime() / 60)
 	sec = DotaTime() % 60
 
@@ -50,6 +57,7 @@ function AbilityUsageThink()
 			local _item = npcBot:GetItemInSlot(i):GetName()
 			if(_item == itemBlink) then
 				itemBlink = npcBot:GetItemInSlot(i);
+				meepoStatus.SetIsFarmed(true)
 			end
 			if(_item == itemTalon) then
 				itemTalon = npcBot:GetItemInSlot(i);
@@ -234,12 +242,12 @@ function ConsiderPoof()
 	then
 		for _,meepo in pairs( meepoStatus.GetMeepos() )
 		do
-			if (npcBot:GetActiveMode() ~= BOT_MODE_RETREAT and
-		npcBot:GetActiveMode() ~= BOT_MODE_EVASIVE_MANEUVERS and
-		npcBot:GetActiveMode() ~= BOT_MODE_ATTACK and
-		npcBot:GetActiveMode() ~= BOT_MODE_ROSHAN and
-		npcBot:GetActiveMode() ~= BOT_MODE_DEFEND_ALLY and
-		 GetUnitToUnitDistance( npcBot, meepo ) > 1500 ) -- TODO check that they aren't more screwed than you
+			if (meepo:GetActiveMode() ~= BOT_MODE_EVASIVE_MANEUVERS and
+				meepo:GetActiveMode() ~= BOT_MODE_ATTACK and
+				meepo:GetActiveMode() ~= BOT_MODE_ROSHAN and
+				meepo:GetActiveMode() ~= BOT_MODE_DEFEND_ALLY and
+				GetUnitToUnitDistance( npcBot, meepo ) > 1500 and
+				meepo:DistanceFromFountain() < npcBot:DistanceFromFountain() ) -- TODO check that they aren't more screwed than you
 			then
 			--print("retreat Poof")
 				return BOT_ACTION_DESIRE_MODERATE, meepo;
@@ -255,7 +263,7 @@ function ConsiderPoof()
 
 		if ( npcTarget ~= nil ) 
 		then
-			if ( CanCastPoofOnTarget( npcTarget ) and GetUnitToUnitDistance( npcBot, npcTarget ) < nRadius)
+			if ( CanCastPoofOnTarget( npcTarget ) and GetUnitToUnitDistance( npcBot, npcTarget ) < nRadius / 2 )
 			then
 				if(npcBot:GetMana() > (npcBot:GetMaxMana() * .75))
 				then
@@ -263,6 +271,8 @@ function ConsiderPoof()
 					return BOT_ACTION_DESIRE_MODERATE, npcBot;
 				end
 			end
+		else
+
 		end
 	end
 
@@ -273,6 +283,19 @@ function ConsiderPoof()
 		if(npcBot:GetMana() > (npcBot:GetMaxMana() * (.4 - (1 - (npcBot:GetHealth() / npcBot:GetMaxHealth())))) and #tableNearbyCreeps >= 2)
 		then
 		--print("Farm Poof")
+			return BOT_ACTION_DESIRE_MODERATE, npcBot;
+		end
+	end
+
+	-- if we're pushing
+	if ( npcBot:GetActiveMode() == BOT_MODE_PUSH_TOWER_TOP or
+		 npcBot:GetActiveMode() == BOT_MODE_PUSH_TOWER_BOT or
+		 npcBot:GetActiveMode() == BOT_MODE_PUSH_TOWER_MID)
+	then
+		local tableNearbyCreeps = npcBot:GetNearbyCreeps( nRadius, true ) 
+		if(npcBot:GetMana() > (npcBot:GetMaxMana() * (.4 - (1 - (npcBot:GetHealth() / npcBot:GetMaxHealth())))) and #tableNearbyCreeps >= 4)
+		then
+		--print("Push Poof")
 			return BOT_ACTION_DESIRE_MODERATE, npcBot;
 		end
 	end

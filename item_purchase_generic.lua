@@ -23,8 +23,8 @@ local tableItemsToBuy = build["items"]
 local function ThinkLvlupAbility(level)
     local npcBot = GetBot()
     -- Do I have a skill point?
-    --print (#BotAbilityPriority .. " > " .. "25 - " .. npcBot:GetHeroLevel())
-    if (#BotAbilityPriority > (25 - npcBot:GetHeroLevel())) then  
+    --print (#BotAbilityPriority .. " > " .. "25 - " .. npcBot:GetLevel())
+    if (#BotAbilityPriority > (25 - npcBot:GetLevel())) then  
         local ability_name = BotAbilityPriority[1];
         -- Can I slot a skill with this skill point?
         if(ability_name ~="-1")
@@ -56,7 +56,7 @@ function ItemPurchaseThink()
     
     -- check if real meepo
     if( GetBot():GetUnitName() == "npc_dota_hero_meepo") then
-        if(npcBot:GetHeroLevel() > 1) then
+        if(npcBot:GetLevel() > 1) then
             for i=0, 5 do
                 if(npcBot:GetItemInSlot(i) ~= nil ) then
                     if not (npcBot:GetItemInSlot(i):GetName() == "item_boots" or npcBot:GetItemInSlot(i):GetName() == "item_power_treads") then
@@ -124,10 +124,10 @@ local ability_name = BotAbilityPriority[1];
 local ability = GetBot():GetAbilityByName(ability_name);
 --print(ability:GetLevel())
 if(ability ~= nil and ability:GetLevel() > 0) then
-    --print (#BotAbilityPriority .. " > " .. "25 - " .. npcBot:GetHeroLevel())
-    if #BotAbilityPriority > (25 - npcBot:GetHeroLevel()) then
-        --print(#BotAbilityPriority - (25 - npcBot:GetHeroLevel()))
-        for i=1, (#BotAbilityPriority - (25 - npcBot:GetHeroLevel())) do
+    --print (#BotAbilityPriority .. " > " .. "25 - " .. npcBot:GetLevel())
+    if #BotAbilityPriority > (25 - npcBot:GetLevel()) then
+        --print(#BotAbilityPriority - (25 - npcBot:GetLevel()))
+        for i=1, (#BotAbilityPriority - (25 - npcBot:GetLevel())) do
             table.remove(BotAbilityPriority, 1)
         end
     end

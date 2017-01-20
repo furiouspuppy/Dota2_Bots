@@ -2,6 +2,7 @@ local utils = require(GetScriptDirectory() .. "/util")
 local jungleStatus = require(GetScriptDirectory() .."/jungle_status" )
 --print("Farm mode instantiated")
 local inspect = require(GetScriptDirectory() .. "/inspect")
+local meepoStatus = require(GetScriptDirectory() .."/meepo_status" )
 ----------------------------------------------------------------------------------------------------
 
 STATE_IDLE = "STATE_IDLE"
@@ -11,9 +12,9 @@ STATE_ATTACKING_CAMP = "STATE_ATTACKING_CAMP"
 
 local state = STATE_IDLE
 local npcBot = GetBot()
-local player = npcBot:GetPlayer()
+local player = npcBot:GetPlayerID()
 local team = GetTeam()
-local level = npcBot:GetHeroLevel()
+local level = npcBot:GetLevel()
 local clone = -1
 jungleStatus.NewJungle()
 local campToFarm = nil
@@ -22,18 +23,20 @@ local creepRespawn = true
 local runeRespawn = true
 local min = 0
 local sec = 0
+local farmed = false
 
 ----------------------------------------------------------------------------------------------------
 
 function GetDesire()
-	local testtt = GetNeutralSpawners()
-	--utils.print_r(testtt)
-	--print(assert(inspect.inspect(testtt)))
 	local desireMultiplier = 1
-	local level = npcBot:GetHeroLevel()
-	local min = math.floor(DotaTime() / 60)
-	local sec = DotaTime() % 60
+	level = npcBot:GetLevel()
+	min = math.floor(DotaTime() / 60)
+	sec = DotaTime() % 60
 	local camplvl = CAMP_EASY
+
+	if meepoStatus.GetIsFarmed() then
+		return BOT_MODE_DESIRE_NONE
+	end
 
 	--set clone#
 	if(clone == -1) then
@@ -134,8 +137,6 @@ end
 
 function Think()	
 	--print(clone .. ":" .. state)
-	min = math.floor(DotaTime() / 60)
-	sec = DotaTime() % 60
 
 	-- check if time to setup stacking
 	if (not (state == STATE_MOVING_TOSTACK or
@@ -171,15 +172,18 @@ function Think()
 		-- setup jungle decisions for current level
 		local campsICanHandle = utils.deepcopy(jungleStatus.GetJungle(team))
 		if campsICanHandle ~= nil then
+			--utils.print_r(campsICanHandle)
 			camplvl = CAMP_EASY
 			if level > 4 then camplvl = CAMP_MEDIUM end
 			if level > 8 then camplvl = CAMP_HARD end
 			if level > 13 then camplvl = CAMP_ANCIENT end
 			for i=#campsICanHandle,1,-1 do
 				if campsICanHandle[i][DIFFICULTY] > camplvl then
+					--print(campsICanHandle[i][DIFFICULTY] .. ":" .. camplvl)
 					campsICanHandle[i] = nil	
 				end
 			end
+			--utils.print_r(campsICanHandle)
 			if campsICanHandle ~= nil then
 				campToFarm = npcBot:GetNearestNeutrals(campsICanHandle)
 			end
