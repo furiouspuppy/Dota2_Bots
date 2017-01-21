@@ -2,7 +2,6 @@ local utils = require(GetScriptDirectory() .. "/util")
 local inspect = require(GetScriptDirectory() .. "/inspect")
 local enemyStatus = require(GetScriptDirectory() .."/enemy_status" )
 local teamStatus = require(GetScriptDirectory() .."/team_status" )
-local inspect = require(GetScriptDirectory() .. "/inspect")
 ----------------------------------------------------------------------------------------------------
 
 local castPhaseDesire = 0;
@@ -16,7 +15,7 @@ local castForceEnemyDesire = 0;
 ----------------------------------------------------------------------------------------------------
 local courierTime = 0
 
-function CourierUsageThink()
+--[[function CourierUsageThink()
 	local npcBot = GetBot()
 
 	if (IsCourierAvailable() and
@@ -32,7 +31,7 @@ function CourierUsageThink()
 		npcBot:Action_CourierDeliver( )
 		courierTime = DotaTime()
 	end
-end
+end]]
 ----------------------------------------------------------------------------------------------------
 
 function AbilityUsageThink()

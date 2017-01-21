@@ -8,10 +8,10 @@ local rawEnemyPower = 0
 ----------------------------------------------------------------------------------------------------
 --know thy enemy
 function X.FillHeroesTable ()
-	if next(tableEnemyHeroes) == nil then
+	if next(tableEnemyHeroes) == nil and (GetGameState() == GAME_STATE_GAME_IN_PROGRESS or GetGameState() == GAME_STATE_PRE_GAME) then
 		local us = GetTeamPlayers( GetTeam() )
 		local them
-		if math.abs(GetTeam() - 3) == 1 then
+		if GetTeam() == 2 then
 			them = 3
 		else
 			them = 2
@@ -65,6 +65,7 @@ function X.UpdateEnemyStatus ()
 	for _,v in pairs(tableEnemyHeroes) do
 		if v:CanBeSeen() then
 			v.missing = false
+			v.lane = v:GetLane()
 			local pow = v:GetEstimatedDamageToTarget( true, GetTeamMember( GetTeam(), 1 ), 10.0, DAMAGE_TYPE_PHYSICAL ) / dummyPhysResist
 			if v.attackPower and pow > v.attackPower then
 				v.attackPower = pow

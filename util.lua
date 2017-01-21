@@ -18,6 +18,7 @@ CDOTA_Bot_Script.IsFighting = false
 CDOTA_Bot_Script.LostCause = false
 CDOTA_Bot_Script.hasGlobal = false
 CDOTA_Bot_Script.missing = true
+CDOTA_Bot_Script.lane = LANE_NONE
 CDOTA_Bot_Script.NearbyFriends = {}
 CDOTA_Bot_Script.NearbyEnemies = {}
 ----------------------------------------------------------------------------------------------------
@@ -82,6 +83,12 @@ end
 
 function CDOTA_Bot_Script:GetLocationDanger()
     return utilsModule.GetLocationDanger(self:GetLocation())
+end
+
+----------------------------------------------------------------------------------------------------
+
+function CDOTA_Bot_Script:GetLane()
+    return utilsModule.GetLane(self:GetLocation())
 end
 
 ----------------------------------------------------------------------------------------------------

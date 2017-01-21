@@ -152,11 +152,11 @@ function GetDesire()
 	
 	local reason5 = (0.3 * utils.GetLocationDanger(npcBot:GetLocation()))
 	--print(npcBot:GetUnitName().." 5: " .. retreat)
-	if RemapValClamped( retreat, DANGER_NONE, DANGER_ABSOLUTE, DANGER_NONE, DANGER_ABSOLUTE ) > .7 then
+	if RemapValClamped( retreat, 0.0, 1.0, 0.0, 1.0 ) > .7 then
 		retreating = true
 		npcBot.NeedsHelp = true
 		npcBot.CanHelp = false
-		print(reason1 .. ":" .. reason2 .. ":" .. reason4 .. ":" .. reason5)-- .. ":" .. reason3
+		--print(reason1 .. ":" .. reason2 .. ":" .. reason4 .. ":" .. reason5)-- .. ":" .. reason3
 		return BOT_MODE_DESIRE_ABSOLUTE
 	end
 	--if npcBot:GetUnitName() == "npc_dota_hero_meepo" then

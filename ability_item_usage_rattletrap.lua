@@ -5,7 +5,7 @@ local inspect = require(GetScriptDirectory() .. "/inspect")
 ----------------------------------------------------------------------------------------------------
 local courierTime = 0
 
-function CourierUsageThink()
+--[[function CourierUsageThink()
 	local npcBot = GetBot()
 
 	if (IsCourierAvailable() and
@@ -21,7 +21,7 @@ function CourierUsageThink()
 		npcBot:Action_CourierDeliver( )
 		courierTime = DotaTime()
 	end
-end
+end]]
 ----------------------------------------------------------------------------------------------------
 --rattletrap_battery_assault
 --rattletrap_hookshot

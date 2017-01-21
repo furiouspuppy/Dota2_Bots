@@ -20,7 +20,8 @@ function X.FillHeroesTable ()
 			--print("added: " .. i)
 		end
 
-		for _,v in pairs(tableFriendlyHeroes) do			
+		for _,v in pairs(tableFriendlyHeroes) do	
+			v.Role = utils.Roles[v:GetUnitName()]		
 			if (v:GetUnitName() == "npc_dota_hero_ancient_apparition" or
 				v:GetUnitName() == "npc_dota_hero_spirit_breaker" or
 				v:GetUnitName() == "npc_dota_hero_wisp" or
@@ -91,6 +92,8 @@ function X.UpdateTeamStatus()
 			npcBot.CanHelp = true
 		end
 	end
+
+	npcBot.lane = npcBot:GetLane()
 
 	-- track nearby players
 	npcBot.NearbyFriends = {}

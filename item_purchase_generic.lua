@@ -102,10 +102,10 @@ function ItemPurchaseThink()
         end
 		if npcBot:Action_PurchaseItem( sNextItem ) == PURCHASE_ITEM_SUCCESS then
             npcBot.secretShopMode = false;
-    		if(IsCourierAvailable()) then
-    			--print("useCourier" .. tableItemsToBuy[1])
-    			npcBot:Action_CourierDeliver( )
-    		end
+    		--if(IsCourierAvailable()) then
+    		--	--print("useCourier" .. tableItemsToBuy[1])
+    		--	npcBot:Action_CourierDeliver( )
+    		--end
     		table.remove( tableItemsToBuy, 1 );
         end
 	end

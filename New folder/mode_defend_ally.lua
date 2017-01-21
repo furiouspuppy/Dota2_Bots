@@ -5,6 +5,7 @@ local enemyStatus = require( "bots".."/enemy_status" )
 
 function GetDesire()
 	npcBot = GetBot()
+	print("test:"))
 
 	if npcBot.CanHelp then
 		for _,v in pairs(teamStatus.GetHeroes()) do
