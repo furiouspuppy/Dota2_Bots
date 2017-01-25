@@ -8,61 +8,82 @@ local tableRunes = {}
 
 X.TeamFight = false
 X.CallForGlobal = false
-X.GlobalTarget = nil
+X.GlobalTarget = nil1
 
 ----------------------------------------------------------------------------------------------------
 --know thy self
 function X.FillHeroesTable ()
-	if next(tableFriendlyHeroes) == nil then
-		--utils.print_r(them)
-		for i=1,5 do
-			tableFriendlyHeroes[GetTeamMember( GetTeam(), i ):GetUnitName()] = GetTeamMember( GetTeam(), i )
-			--print("added: " .. i)
-		end
-
-		for _,v in pairs(tableFriendlyHeroes) do	
-			v.Role = utils.Roles[v:GetUnitName()]		
-			if (v:GetUnitName() == "npc_dota_hero_ancient_apparition" or
-				v:GetUnitName() == "npc_dota_hero_spirit_breaker" or
-				v:GetUnitName() == "npc_dota_hero_wisp" or
-				v:GetUnitName() == "npc_dota_hero_treant" or
-				v:GetUnitName() == "npc_dota_hero_abyssal_underlord" or
-				v:GetUnitName() == "npc_dota_hero_bloodseeker" or
-				v:GetUnitName() == "npc_dota_hero_ember_spirit" or
-				v:GetUnitName() == "npc_dota_hero_meepo" or
-				v:GetUnitName() == "npc_dota_hero_spectre" or
-				v:GetUnitName() == "npc_dota_hero_invoker" or
-				v:GetUnitName() == "npc_dota_hero_furion" or
-				v:GetUnitName() == "npc_dota_hero_silencer" or
-				v:GetUnitName() == "npc_dota_hero_storm_spirit" or
-				v:GetUnitName() == "npc_dota_hero_zuus")
-			then
-			v.hasGlobal = true
-			end
-		end
-		--local test = GetNeutralSpawners()
-		--utils.print_r(tableFriendlyHeroes)
-		--print(assert(inspect.inspect(enemyPlayers)))
+	if GetGameState() ~= GAME_STATE_GAME_IN_PROGRESS and 
+		GetGameState() ~= GAME_STATE_PRE_GAME
+	then 
+		return
 	end
+
+	--utils.print_r(them)
+	for i=1,5 do
+		if GetTeamMember( GetTeam(), i ) then
+			X.AddHero(GetTeamMember( GetTeam(), i ))
+			--print("found: " .. GetTeamMember( GetTeam(), i ):GetUnitName() )
+		end
+	end
+
+	--utils.print_r(tableFriendlyHeroes)
+
+	for _,v in pairs(tableFriendlyHeroes) do	
+		v.Role = utils.Roles[v:GetUnitName()]		
+		if (v:GetUnitName() == "npc_dota_hero_ancient_apparition" or
+			v:GetUnitName() == "npc_dota_hero_spirit_breaker" or
+			v:GetUnitName() == "npc_dota_hero_wisp" or
+			v:GetUnitName() == "npc_dota_hero_treant" or
+			v:GetUnitName() == "npc_dota_hero_abyssal_underlord" or
+			v:GetUnitName() == "npc_dota_hero_bloodseeker" or
+			v:GetUnitName() == "npc_dota_hero_ember_spirit" or
+			v:GetUnitName() == "npc_dota_hero_meepo" or
+			v:GetUnitName() == "npc_dota_hero_spectre" or
+			v:GetUnitName() == "npc_dota_hero_invoker" or
+			v:GetUnitName() == "npc_dota_hero_furion" or
+			v:GetUnitName() == "npc_dota_hero_silencer" or
+			v:GetUnitName() == "npc_dota_hero_storm_spirit" or
+			v:GetUnitName() == "npc_dota_hero_zuus")
+		then
+		v.hasGlobal = true
+		end
+	end
+	--local test = GetNeutralSpawners()
+	--utils.print_r(tableFriendlyHeroes)
+	--print(assert(inspect.inspect(enemyPlayers)))
 end
 
 ----------------------------------------------------------------------------------------------------
 --know thy enemy
-function X.UpdateTeamStatus()
+function X.UpdateTeamStatus( hHero )
 	local npcBot = GetBot()
-
-	if next(tableFriendlyHeroes) == nil then
+	local updater = 0
+	if #tableFriendlyHeroes == 0 or 
+		(#tableFriendlyHeroes < 5 and 
+		GetGameMode( ) == GAMEMODE_AP) 
+	then
 		X.FillHeroesTable()
 	end
 
-	--Make first bot in tableFriendlyHeroes update human players and enemy team
-	if 	next(tableFriendlyHeroes) == npcBot:GetUnitName() and 
-		tableFriendlyHeroes[next(tableFriendlyHeroes)]:IsBot() 
-	then
+	-- if unit was updated by a different bot (like a player)
+	if npcBot ~= hHero then
+		npcBot = hHero
+	end
+
+	--Make 1 bot in tableFriendlyHeroes updater of human players and enemy team
+	for _,v in pairs(tableFriendlyHeroes) do
+		if v:IsBot() then
+			updater = v
+		end
+	end
+
+	if updater and updater == npcBot then
+		--print("updating")
 		enemyStatus.UpdateEnemyStatus()
 		for _,v in pairs(tableFriendlyHeroes) do
 			if not v:IsBot() then
-				X.UpdateTeamStatus( v:GetUnitName() )
+				X.UpdateTeamStatus( v )
 			end
 		end
 	end
@@ -95,6 +116,7 @@ function X.UpdateTeamStatus()
 
 	npcBot.lane = npcBot:GetLane()
 
+	--print("UPDATE: " .. npcBot:GetUnitName())
 	-- track nearby players
 	npcBot.NearbyFriends = {}
 	for _,w in pairs(tableFriendlyHeroes) do
@@ -131,21 +153,27 @@ end
 ----------------------------------------------------------------------------------------------------
 --know thy enemy
 function X.GetHeroes ()
-	if next(tableFriendlyHeroes) == nil then
+	if #tableFriendlyHeroes == 0 or 
+		(#tableFriendlyHeroes < 5 and 
+		GetGameMode( ) == GAMEMODE_AP) 
+	then
 		X.FillHeroesTable()
 	end
+	--print(tostring(tableFriendlyHeroes))
 	return tableFriendlyHeroes
 end
 
 ----------------------------------------------------------------------------------------------------
 --we missed someone? ... meepo...
 function X.AddHero ( hHero )
-	if next(tableFriendlyHeroes) == nil then
-		--do nothing
-	else
-		table.insert(tableFriendlyHeroes, hHero )
-		print(hHero:GetUnitName() .. " added!")
+	for _,v in pairs(tableFriendlyHeroes) do
+		if v == hHero then
+			return
+		end
 	end
+
+	table.insert(tableFriendlyHeroes, hHero )
+	--print(hHero:GetUnitName() .. " added!")
 end
 
 ----------------------------------------------------------------------------------------------------

@@ -206,8 +206,10 @@ function callTeamUpdate()
 	end
 
 	--find a better place for this
-	if GetGameState() == GAME_STATE_GAME_IN_PROGRESS then 
-		teamStatus.UpdateTeamStatus()
+	if GetGameState() == GAME_STATE_GAME_IN_PROGRESS or
+		GetGameState() == GAME_STATE_PRE_GAME
+	then 
+		teamStatus.UpdateTeamStatus(npcBot)
 
 		--[[print(" ")
 		print(npcBot:GetUnitName() .. ": ")

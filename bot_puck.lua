@@ -1,12 +1,49 @@
 --[[local utils = require(GetScriptDirectory() .. "/util")
 local inspect = require(GetScriptDirectory() .. "/inspect")
+local teamStatus = require( "bots".."/team_status" )
 
 function Think()
+      local test = teamStatus.GetHeroes()
+      if GetGameState() == GAME_STATE_GAME_IN_PROGRESS or
+            GetGameState() == GAME_STATE_PRE_GAME
+      then 
+            teamStatus.UpdateTeamStatus(GetBot())
+      end
+      --print("!" .. tostring(teamStatus.GetHeroes()))
+      --utils.print_r(teamStatus.GetHeroes())
+
+      --for _,v in pairs(teamStatus.GetHeroes()) do
+      --      print(v:GetUnitName())
+      --end
+      --print(tostring(_LOADED))
+      --print(tostring(teamStatus.GetHeroes()[6]))
+      --print(assert(inspect.inspect(teamStatus.GetHeroes()[6], { depth = 2 })))
+
+      print("____________________________________")
+      for _,v in pairs(test) do
+            print("")
+            print(v:GetUnitName())
+            local friends = "  Friends:"
+            for _,w in pairs(v.NearbyFriends) do
+                  friends = friends .. " " .. w:GetUnitName()
+            end
+            print(friends)
+            local enemies = "  Enemies:"
+            for _,x in pairs(v.NearbyEnemies) do
+                  enemies = enemies .. " " .. x:GetUnitName()
+            end
+            print(enemies)
+            --print(assert(inspect.inspect(v.NearbyFriends)))
+      end
+      print("")
+      --print(tostring(test[0]))
+      --print(assert(inspect.inspect(test)))
+end
       --print("DTop:"..utils.GetLane( Vector(-5000,5310,0)))
       --print("RTop:"..utils.GetLane( Vector(-4510,4500,0)))
       --print("RBot:"..utils.GetLane( Vector(5100,-5110,0)))
       --print("DBot:"..utils.GetLane( Vector(4451,-4450,0)))
-      print(utils.GetLane(Vector(-4850,-6000,0)))
+      --[[print(utils.GetLane(Vector(-4850,-6000,0)))
       DebugDrawCircle(Vector(-4850,-6000,300), 25,  0, 255, 0)
       DebugDrawLine( Vector(-6455,-5717,300),Vector(6450,5869,300), 255, 0, 0 ) --y = 0.8684878799538284x + 75.93805309734489
       DebugDrawLine( Vector(-5000,5310,300),Vector(6450,5869,300), 255, 0, 0 )

@@ -18,7 +18,9 @@ function X.FillHeroesTable ()
 		end
 		--utils.print_r(them)
 		for i=1,5 do
-			tableEnemyHeroes[GetTeamMember( them, i ):GetUnitName()] = GetTeamMember( them, i )
+			if GetTeamMember( them, i ) then
+				X.AddHero(GetTeamMember( them, i ))
+			end
 			--table.insert(tableEnemyHeroes,GetTeamMember( them, i ))
 			--print("added: " .. i)
 		end
@@ -53,7 +55,10 @@ end
 ----------------------------------------------------------------------------------------------------
 --know thy enemy
 function X.UpdateEnemyStatus ()
-	if next(tableEnemyHeroes) == nil then
+	if #tableEnemyHeroes == 0 or 
+		(#tableEnemyHeroes < 5 and 
+		GetGameMode( ) == GAMEMODE_AP) 
+	then
 		X.FillHeroesTable()
 	end
 
@@ -83,18 +88,28 @@ end
 ----------------------------------------------------------------------------------------------------
 --know thy enemy
 function X.GetHeroes ()
-	if next(tableEnemyHeroes) == nil then
+	if #tableEnemyHeroes == 0 or 
+		(#tableEnemyHeroes < 5 and 
+		GetGameMode( ) == GAMEMODE_AP) 
+	then
 		X.FillHeroesTable()
 	end
+	--print(tostring(tableFriendlyHeroes))
 	return tableEnemyHeroes
 end
 
 ----------------------------------------------------------------------------------------------------
+--we missed someone? ... meepo...
+function X.AddHero ( hHero )
+	for _,v in pairs(tableEnemyHeroes) do
+		if v == hHero then
+			return
+		end
+	end
 
-function X.GetAttackPower (sHeroName)
-	--utils.print_r(tableEnemyHeroes)
-	return tableEnemyHeroes[sHeroName].attackPower
+	table.insert(tableEnemyHeroes, hHero )
 end
+
 
 ----------------------------------------------------------------------------------------------------
 

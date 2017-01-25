@@ -11,12 +11,14 @@ X["items"] = {
 "item_slippers", -- poor mans shield
 "item_stout_shield", -- poor mans shield
 --"item_recipe_iron_talon", -- iron talon
-"item_boots", -- power treads
-"item_gloves",-- power treads
-"item_belt_of_strength",-- power treads
+--"item_boots", -- power treads
+--"item_gloves",-- power treads
+--"item_belt_of_strength",-- power treads
+"item_boots", -- BOTs
 "item_boots_of_elves",-- dragon lance
 "item_boots_of_elves",-- dragon lance
 "item_ogre_axe", -- dragon lance
+"item_recipe_travel_boots", -- BOTs
 "item_blade_of_alacrity", -- aghs
 "item_ogre_axe",-- aghs
 "item_point_booster",-- aghs

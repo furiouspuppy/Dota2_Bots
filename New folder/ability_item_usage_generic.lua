@@ -8,7 +8,7 @@ function CourierUsageThink()
 	
 	local npcBot = GetBot()
 
-	print(GetCourierState(GetCourier(0)))
+	--print(GetCourierState(GetCourier(0)))
 
 	if (IsCourierAvailable() and
 		npcBot:DistanceFromFountain() < 9000 and 

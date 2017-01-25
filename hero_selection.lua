@@ -1,3 +1,5 @@
+-- credit to somanyrobots for this file.  Thanks!
+
 local utils = require(GetScriptDirectory() .. "/util")
 
 -- mandate that the bots will pick these heroes - for testing purposes

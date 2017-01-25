@@ -59,7 +59,9 @@ function ItemPurchaseThink()
         if(npcBot:GetLevel() > 1) then
             for i=0, 5 do
                 if(npcBot:GetItemInSlot(i) ~= nil ) then
-                    if not (npcBot:GetItemInSlot(i):GetName() == "item_boots" or npcBot:GetItemInSlot(i):GetName() == "item_power_treads") then
+                    if not (npcBot:GetItemInSlot(i):GetName() == "item_boots" or 
+                        npcBot:GetItemInSlot(i):GetName() == "item_power_treads" or
+                        npcBot:GetItemInSlot(i):GetName() == "item_travel_boots") then
                         break
                     end
                 end
@@ -146,6 +148,17 @@ for i=0, 15 do
         elseif(_item == "item_arcane_boots")then
             table.insert(currentItems, "item_energy_booster")
             table.insert(currentItems, "item_boots")
+        elseif(_item == "item_power_treads")then
+            table.insert(currentItems, "item_boots")
+            table.insert(currentItems, "item_gloves")
+            table.insert(currentItems, "item_belt_of_strength")
+        elseif(_item == "item_travel_boots")then
+            table.insert(currentItems, "item_boots")
+            table.insert(currentItems, "item_recipe_travel_boots")
+        elseif(_item == "item_travel_boots_2")then
+            table.insert(currentItems, "item_boots")
+            table.insert(currentItems, "item_recipe_travel_boots")
+            table.insert(currentItems, "item_recipe_travel_boots_2")
         elseif(_item == "item_null_talisman")then
             table.insert(currentItems, "item_circlet")
             table.insert(currentItems, "item_mantle")
@@ -163,10 +176,6 @@ for i=0, 15 do
             table.insert(currentItems, "item_staff_of_wizardry")
             table.insert(currentItems, "item_ogre_axe")
             table.insert(currentItems, "item_blade_of_alacrity")
-        elseif(_item == "item_power_treads")then
-            table.insert(currentItems, "item_boots")
-            table.insert(currentItems, "item_gloves")
-            table.insert(currentItems, "item_belt_of_strength")
         elseif(_item == "item_force_staff")then
             table.insert(currentItems, "item_ring_of_regen")
             table.insert(currentItems, "item_staff_of_wizardry")

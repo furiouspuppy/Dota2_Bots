@@ -8,12 +8,14 @@ utilsModule["tableRuneSpawns"] = vec.tableRuneSpawns
 utilsModule.Roles = BotData.Roles
 ----------------------------------------------------------------------------------------------------
 
+CDOTA_Bot_Script.secretShopMode = false
 CDOTA_Bot_Script.AttackPower = 0
 CDOTA_Bot_Script.MagicPower = 0
 CDOTA_Bot_Script.Role = 0
 CDOTA_Bot_Script.NeedsHelp = false
 CDOTA_Bot_Script.CanHelp = true
 CDOTA_Bot_Script.IsReady = false
+CDOTA_Bot_Script.CanPush = false
 CDOTA_Bot_Script.IsFighting = false
 CDOTA_Bot_Script.LostCause = false
 CDOTA_Bot_Script.hasGlobal = false
@@ -143,6 +145,16 @@ function utilsModule.deepcopy(orig)
         copy = orig
     end
     return copy
+end
+
+----------------------------------------------------------------------------------------------------
+
+function utilsModule.GetEnemyTeam()
+    if GetTeam() == TEAM_RADIANT then
+        return TEAM_DIRE
+    else
+        return TEAM_RADIANT
+    end
 end
 
 ----------------------------------------------------------------------------------------------------

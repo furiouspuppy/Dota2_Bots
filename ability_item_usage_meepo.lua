@@ -182,7 +182,7 @@ function ConsiderEarthBind()
 				end
 
 				--print("Chase Net At:" ..  GetUnitToUnitDistance( npcBot, npcTarget ) / 857 .. ":" .. tostring(npcTarget:GetExtrapolatedLocation( (GetUnitToUnitDistance( npcBot, npcTarget ) / 857))  + npcTarget:GetLocation() ))
-				return BOT_ACTION_DESIRE_MODERATE, (npcTarget:GetExtrapolatedLocation( GetUnitToUnitDistance( npcBot, npcTarget ) / 857  ) + npcTarget:GetLocation());
+				return BOT_ACTION_DESIRE_MODERATE, (npcTarget:GetExtrapolatedLocation( GetUnitToUnitDistance( npcBot, npcTarget ) / 857  ));
 			end
 		end
 	end
@@ -238,7 +238,9 @@ function ConsiderPoof()
 	--------------------------------------
 
 	-- If we're seriously retreating, see if we can poof away
-	if ( npcBot:GetActiveMode() == BOT_MODE_RETREAT and npcBot:GetActiveModeDesire() >= BOT_MODE_DESIRE_HIGH ) 
+	if ( npcBot:GetActiveMode() == BOT_MODE_RETREAT and 
+		npcBot:GetActiveModeDesire() >= BOT_MODE_DESIRE_HIGH and
+		#npcBot.NearbyEnemies >= 1) 
 	then
 		for _,meepo in pairs( meepoStatus.GetMeepos() )
 		do
@@ -251,6 +253,28 @@ function ConsiderPoof()
 			then
 			--print("retreat Poof")
 				return BOT_ACTION_DESIRE_MODERATE, meepo;
+			end
+		end
+	end
+
+		-- If we're pushing and need out
+	if ( npcBot:GetActiveMode() == BOT_MODE_PUSH_TOWER_MID or
+		npcBot:GetActiveMode() == BOT_MODE_PUSH_TOWER_TOP or
+		npcBot:GetActiveMode() == BOT_MODE_PUSH_TOWER_BOT ) 
+	then
+		if #npcBot.NearbyEnemies > 0 and #npcBot.NearbyFriends == 0 then
+			for _,meepo in pairs( meepoStatus.GetMeepos() )
+			do
+				if (meepo:GetActiveMode() ~= BOT_MODE_EVASIVE_MANEUVERS and
+					meepo:GetActiveMode() ~= BOT_MODE_ATTACK and
+					meepo:GetActiveMode() ~= BOT_MODE_ROSHAN and
+					meepo:GetActiveMode() ~= BOT_MODE_DEFEND_ALLY and
+					GetUnitToUnitDistance( npcBot, meepo ) > 1500 and
+					meepo:DistanceFromFountain() < npcBot:DistanceFromFountain() ) -- TODO check that they aren't more screwed than you
+				then
+				--print("retreat Poof")
+					return BOT_ACTION_DESIRE_MODERATE, meepo;
+				end
 			end
 		end
 	end
@@ -277,12 +301,28 @@ function ConsiderPoof()
 	end
 
 		-- if we're farming and feel like it
-	if ( npcBot:GetActiveMode() == BOT_MODE_FARM and not ((min % 2 == 0 and sec > 40) or (min %2 == 1 and sec < 3)))
+	if ( npcBot:GetActiveMode() == BOT_MODE_FARM and 
+	not ((min % 2 == 0 and sec > 40) or (min %2 == 1 and sec < 3)))
 	then
 		local tableNearbyCreeps = npcBot:GetNearbyCreeps( nRadius, true ) 
 		if(npcBot:GetMana() > (npcBot:GetMaxMana() * (.4 - (1 - (npcBot:GetHealth() / npcBot:GetMaxHealth())))) and #tableNearbyCreeps >= 2)
 		then
 		--print("Farm Poof")
+			return BOT_ACTION_DESIRE_MODERATE, npcBot;
+		end
+	end
+
+	-- if we're pushing
+	if (npcBot:GetActiveMode() == BOT_MODE_PUSH_TOWER_TOP or
+		npcBot:GetActiveMode() == BOT_MODE_PUSH_TOWER_MID or
+		npcBot:GetActiveMode() == BOT_MODE_PUSH_TOWER_BOT)
+	then
+		--print("Push poof?")
+		local tableNearbyCreeps = npcBot:GetNearbyCreeps( nRadius, true )
+		--print(#tableNearbyCreeps) 
+		if(npcBot:GetMana() > (npcBot:GetMaxMana() * (.4 - (1 - (npcBot:GetHealth() / npcBot:GetMaxHealth())))) and #tableNearbyCreeps >= 2)
+		then
+		--print("Push Poof!")
 			return BOT_ACTION_DESIRE_MODERATE, npcBot;
 		end
 	end
@@ -303,8 +343,9 @@ function ConsiderPoof()
 	-- If we need to save another meepo
 	if npcBot:GetActiveMode() ~= BOT_MODE_RETREAT and npcBot:GetHealth() > (npcBot:GetMaxHealth() * .4) then
 		for _,meepo in pairs(meepoStatus.GetMeepos()) do
-			tableNearbyEnemyHeroes = meepo:GetNearbyHeroes( 1300, true, BOT_MODE_NONE );
-			if tableNearbyEnemyHeroes ~= nil and GetUnitToUnitDistance(npcBot, meepo) > 2000 then
+			if (meepo:GetActiveMode() == BOT_MODE_RETREAT and
+			 #meepo.NearbyEnemies >= 1 and 
+			 GetUnitToUnitDistance(npcBot, meepo) > 2000) then
 				if meepo:WasRecentlyDamagedByAnyHero( 1.0 ) then
 					return BOT_ACTION_DESIRE_HIGH, meepo
 				end

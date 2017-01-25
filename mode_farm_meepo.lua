@@ -34,7 +34,7 @@ function GetDesire()
 	sec = DotaTime() % 60
 	local camplvl = CAMP_EASY
 
-	if meepoStatus.GetIsFarmed() then
+	if meepoStatus.GetIsFarmed() or #npcBot.NearbyEnemies > 0 then
 		return BOT_MODE_DESIRE_NONE
 	end
 
@@ -195,7 +195,7 @@ function Think()
 
 	if state == STATE_MOVING_TOCAMP then
 		--print("#"..clone.." is MOVING to camp:"..campToFarm)
-		if GetUnitToLocationDistance( npcBot, campToFarm[VECTOR] ) < 200 then
+		if GetUnitToLocationDistance( npcBot, campToFarm[VECTOR] ) < 100 then
 			state = STATE_ATTACKING_CAMP
 		else
 			npcBot:Action_MoveToLocation( campToFarm[VECTOR] )
