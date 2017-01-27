@@ -95,6 +95,8 @@ function GetDesire()
 			desire = desire + .1
 		end
 
+
+
 		local laneHeadUs = GetLaneFrontAmount( GetTeam(), lane, false )
 		--print(laneHeadUs)
 		desire = desire + (1 - laneHeadUs)

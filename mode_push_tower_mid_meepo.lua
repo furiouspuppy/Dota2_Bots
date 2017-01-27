@@ -95,11 +95,13 @@ function GetDesire()
 			desire = desire + .1
 		end
 
+
+
 		local laneHeadUs = GetLaneFrontAmount( GetTeam(), lane, false )
 		--print(laneHeadUs)
 		desire = desire + (1 - laneHeadUs)
 		--print(lane .. ":" .. desire)
-		--print()
+		--print("")
 		return RemapValClamped( desire, BOT_MODE_DESIRE_MODERATE, BOT_MODE_DESIRE_ABSOLUTE, BOT_MODE_DESIRE_MODERATE, BOT_MODE_DESIRE_VERYHIGH )
 	end
 
