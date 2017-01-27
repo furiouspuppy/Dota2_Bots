@@ -3,6 +3,7 @@
 With 7.00 came a long awaited supported AI for writing our own bots, I play a LOT of bot games with friends so I couldn't resist taking a crack at it.  Gives me an excuse to learn LUA as well.
 
 ##Updates!
+WARNING - Looks like I got hasty with some of these new builds, a few are missing a ; here or there and crashing.  Please report them
 Added new builds for all 39 default bots (plus riki).  Used one of the top rated community guides for each hero with a couple exceptions.
 
 Greatly simplified how new item builds are setup thanks to an item file PBot/pbenologa set up a while back.  Now you can specify derived items like mekansm without writing out each constituant peice.  You can still write out each peace if you care what order they are bought in.  I will continue to make this purchasing smarter as I go.  Next goal is role specific dynamic team items.
