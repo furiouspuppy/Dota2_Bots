@@ -5,8 +5,8 @@ local utils = require(GetScriptDirectory() .. "/util")
 -- mandate that the bots will pick these heroes - for testing purposes
 requiredHeroes = {
     --'npc_dota_hero_rattletrap';
-    --'npc_dota_hero_meepo';
-    --'npc_dota_hero_puck';
+    'npc_dota_hero_meepo';
+    'npc_dota_hero_puck';
     --'npc_dota_hero_monkey_king';
     --'npc_dota_hero_bane';
     --'npc_dota_hero_axe';

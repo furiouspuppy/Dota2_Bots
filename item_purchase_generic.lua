@@ -7,8 +7,6 @@ end
 if build == "NOT IMPLEMENTED" then return end
 ----------------------------------------------------------------------------------------------------
 
---[[ Set up your skill build. ]]
-local BotAbilityPriority = build["skills"]
 
 --[[ Set up your item build.  Remember to use base items.  
 To build an derived item like item_magic_wand you will just 
@@ -18,37 +16,6 @@ inventory in the correct order! ]]
 local tableItemsToBuy = {}
 local tpTimer = 0
 local wardTimer = 0
-
-----------------------------------------------------------------------------------------------------
-
--- Think function for spending skill points
-local function ThinkLvlupAbility(level)
-    local npcBot = GetBot()
-    -- Do I have a skill point?
-    --print (#BotAbilityPriority .. " > " .. "25 - " .. npcBot:GetLevel())
-    if (#BotAbilityPriority > (25 - npcBot:GetLevel())) then  
-        local ability_name = BotAbilityPriority[1];
-        -- Can I slot a skill with this skill point?
-        if(ability_name ~="-1")
-        then
-            local ability = GetBot():GetAbilityByName(ability_name);
-            -- Check if its a legit upgrade
-            if( ability:CanAbilityBeUpgraded() and ability:GetLevel() < ability:GetMaxLevel())  
-            then
-                local currentLevel = ability:GetLevel();
-                GetBot():Action_LevelAbility(BotAbilityPriority[1]);
-                if ability:GetLevel() > currentLevel then
-                    --print("Skill: "..ability_name.."  upgraded!");
-                    table.remove(BotAbilityPriority,1)
-                else
-                    --print("Skill: "..ability_name.." upgrade failed?!?");
-                    end
-            end 
-        else
-            table.remove(BotAbilityPriority,1)
-        end
-	end
-end
 
 ----------------------------------------------------------------------------------------------------
 
@@ -78,8 +45,6 @@ function ItemPurchaseThink()
             end
         end
     end
-
-    ThinkLvlupAbility(level)
 
     --print(npcBot:GetUnitName())
 	local currentItems = {}
@@ -112,10 +77,10 @@ function ItemPurchaseThink()
     if utils.Roles[npcBot:GetUnitName()] > 2 then
         if GetItemStockCount( "item_ward_observer" ) > 0 and wardTimer == 0 then
             wardTimer = DotaTime() + 25 - (5 * utils.Roles[npcBot:GetUnitName()])
-            print(npcBot:GetUnitName() .. wardTimer)
+            --print(npcBot:GetUnitName() .. wardTimer)
         end
         if wardTimer ~= 0 and wardTimer < DotaTime() then
-            print(npcBot:GetUnitName())
+            --print(npcBot:GetUnitName())
             if GetItemStockCount( "item_ward_observer" ) > 0 then
                 npcBot:Action_PurchaseItem( "item_ward_observer" )
             end
@@ -173,26 +138,16 @@ local function GetBasicItems( ... )
 end
 ----------------------------------------------------------------------------------------------------
 
+----------------------------------------------------------------------------------------------------
+
 
 --[[this chunk prevents dota_bot_reload_scripts from breaking your 
-	item/skill builds.  Note the script doesn't account for 
-	consumables. ]]
+    item/skill builds.  Note the script doesn't account for 
+    consumables. ]]
 
 local npcBot = GetBot();
 tableItemsToBuy = GetBasicItems(build["items"])
--- check skill build vs current level
-local ability_name = BotAbilityPriority[1];
-local ability = GetBot():GetAbilityByName(ability_name);
---print(ability:GetLevel())
-if(ability ~= nil and ability:GetLevel() > 0) then
-    --print (#BotAbilityPriority .. " > " .. "25 - " .. npcBot:GetLevel())
-    if #BotAbilityPriority > (25 - npcBot:GetLevel()) then
-        --print(#BotAbilityPriority - (25 - npcBot:GetLevel()))
-        for i=1, (#BotAbilityPriority - (25 - npcBot:GetLevel())) do
-            table.remove(BotAbilityPriority, 1)
-        end
-    end
-end
+
 
 -- check item build vs current items
 local currentItems = {}
@@ -211,14 +166,14 @@ end
 
 --utils.print_r(currentItems)
 for i = 0, #currentItems do
-	if(currentItems[i] ~= nil) then
-		for j = 0, #tableItemsToBuy do
-			if tableItemsToBuy[j] == currentItems[i] then
-				--print("Removing Item " .. currentItems[i] .. " index " .. j)
-				table.remove(tableItemsToBuy, j)
-				break
-			end
-		end
-	end
+    if(currentItems[i] ~= nil) then
+        for j = 0, #tableItemsToBuy do
+            if tableItemsToBuy[j] == currentItems[i] then
+                --print("Removing Item " .. currentItems[i] .. " index " .. j)
+                table.remove(tableItemsToBuy, j)
+                break
+            end
+        end
+    end
 end
 --utils.print_r(tableItemsToBuy)

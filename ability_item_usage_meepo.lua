@@ -1,13 +1,15 @@
 local utils = require(GetScriptDirectory() .. "/util")
 local meepoStatus = require(GetScriptDirectory() .."/meepo_status" )
 local teamStatus = require( "bots".."/team_status" )
+local items = require(GetScriptDirectory() .. "/ItemData" )
+local build = require(GetScriptDirectory() .. "/builds/item_build_meepo")
 ----------------------------------------------------------------------------------------------------
 
 if not GetBot():IsIllusion() then
 	meepoStatus.AddMeepo(GetBot())
 	teamStatus.AddHero(GetBot())
 else
-	print("ILLUSION ALERT!")
+	--print("ILLUSION ALERT!")
 end
 
 
@@ -37,6 +39,49 @@ local courierTime = 0
 		courierTime = DotaTime()
 	end
 end]]
+----------------------------------------------------------------------------------------------------
+
+--[[ Set up your skill build. ]]
+local BotAbilityPriority = build["skills"]
+
+-- Think function for spending skill points
+function AbilityLevelUpThink()    
+    --print(GetBot():GetUnitName())
+    if GetGameState() ~= GAME_STATE_GAME_IN_PROGRESS and
+        GetGameState() ~= GAME_STATE_PRE_GAME
+    then 
+        return
+    end
+    local npcBot = GetBot()
+    -- Do I have a skill point?
+    --print (npcBot:GetUnitName() .. npcBot:GetAbilityPoints())
+    if (npcBot:GetAbilityPoints() > 0) then  
+        local ability_name = BotAbilityPriority[1];
+        --print(ability_name)
+        -- Can I slot a skill with this skill point?
+        if(ability_name ~="-1")
+        then
+            local ability = GetBot():GetAbilityByName(ability_name);
+            -- Check if its a legit upgrade
+            --print(npcBot:GetUnitName() .. ":" .. tostring(ability:CanAbilityBeUpgraded())..":".. ability:GetLevel() .. "<" .. ability:GetMaxLevel())
+            if( ability:CanAbilityBeUpgraded() and ability:GetLevel() < ability:GetMaxLevel())  
+            then
+                local currentLevel = ability:GetLevel();
+                GetBot():Action_LevelAbility(BotAbilityPriority[1]);
+                if ability:GetLevel() > currentLevel then
+                    --print("Skill: "..ability_name.."  upgraded!");
+                    table.remove(BotAbilityPriority,1)
+                else
+                    --print("Skill: "..ability_name.." upgrade failed?!?");
+                    end
+            end 
+        else
+            table.remove(BotAbilityPriority,1)
+        end
+	end
+end
+
+
 ----------------------------------------------------------------------------------------------------
 
 function AbilityUsageThink()

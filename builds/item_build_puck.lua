@@ -4,12 +4,8 @@ brown boots / power treads at any time he will think he
 is a clone and skill/item decisions will break! ]]
 X["items"] = { 
                 "item_tango";
-				"item_branches";
-				"item_branches";
-				"item_bottle";
-				"item_circlet",
-				"item_power_treads";
 				"item_magic_wand";
+				"item_power_treads";
                 "item_blink";
 				"item_sheepstick";
                 "item_linken_sphere";
@@ -37,10 +33,10 @@ local ABILITY8 = "special_bonus_unique_puck"
 --use -1 for levels that shouldn't level a skill
 X["skills"] = {
     SKILL_E,    SKILL_Q,    SKILL_W,    SKILL_Q,    SKILL_W,
-    SKILL_R,    SKILL_E,    SKILL_Q,    SKILL_Q,    "-1",--"special_bonus_intelligence_8",
-    SKILL_W,    SKILL_W,    SKILL_E,    SKILL_E,    "-1",--"special_bonus_attack_damage_40",
-    SKILL_R,    "-1",       SKILL_R,    ABILITY2,   ABILITY3,--"special_bonus_spell_amplify_8",
-    ABILITY5,   ABILITY7,   "-1",       "-1",       "-1",--"special_bonus_gold_income_50"
+    SKILL_R,    SKILL_E,    SKILL_Q,    SKILL_Q,    ABILITY2,--"special_bonus_intelligence_8",
+    SKILL_W,    SKILL_W,    SKILL_E,    SKILL_E,    ABILITY3,--"special_bonus_attack_damage_40",
+    SKILL_R,    "-1",       SKILL_R,    "-1",   	ABILITY5,--"special_bonus_spell_amplify_8",
+    "-1",   	ABILITY7,   "-1",       "-1",       "-1",--"special_bonus_gold_income_50"
 };
 
 return X
