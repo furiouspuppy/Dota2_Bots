@@ -3,9 +3,13 @@
 With 7.00 came a long awaited supported AI for writing our own bots, I play a LOT of bot games with friends so I couldn't resist taking a crack at it.  Gives me an excuse to learn LUA as well.
 
 ##Updates!
+Added new builds for all 39 default bots (plus riki).  Used one of the top rated community guides for each hero with a couple exceptions.
+
+Greatly simplified how new item builds are setup thanks to an item file PBot/pbenologa set up a while back.  Now you can specify derived items like mekansm without writing out each constituant peice.  You can still write out each peace if you care what order they are bought in.  I will continue to make this purchasing smarter as I go.  Next goal is role specific dynamic team items.
+
 Reverted to the original retreat mode,  the modes do not play well with changes unless you change them all to match.  Need more work on modes.
 
-Have re-enabled ward/item modes.  Default code seems to have fixed these 2 modes to be adequate again.
+Have re-enabled ward/item modes.  Default code seems to have fixed these 2 modes to be adequate again.  Also made it so the bots of appropirate role buy courier/wards
 
 Version 1 of meepo split push!  Adjust his build to buy Boots of Travel instead of treads and Eth blade and Heart and he now can get poor mans shield out of his inventory for a better item late game.
 
@@ -17,8 +21,6 @@ Puck - playable/rough - TODO's Orb Tracking for jaunt
 Clockwerk - rough - TODO's need fight awareness and much skill work
 
 ##Current General Modes Under Development
-Retreat - I've started overhauling the default decision making based on team awareness in team/enemy status files.  Going to need a lot of iteration but should solve the default bots core problems of terrible map presence and decisions.  Found out default modes don't like to be tweaked one at a time.  Going to take some planning to do this correctly.
-
 Jungling - Team wide jungle camp tracking and stacking with easy to use vectors.  Vectors still being tweaked
 
 Runes - Bots can 'call' runes to be theirs and go and collect them.  Will also grab any rune it walks by that is available. Has a 30% chance they will ignore their called rune, this was a feel decision because every rune being fought for on every cycle just wasn't right. 
@@ -62,6 +64,7 @@ http://docs.moddota.com/lua_bots/
 Also, there are multiple discord discussion channels in the forums linked above.  The people there are a big help and may recognize several chunks of code in here from those communities.  Thanks Guys!
 
 ##Contributors
-Somanyrobots -  hero_selection.lua
+Somanyrobots - hero_selection.lua
+PBot/pbenologa - ItemData.lua 
 
 Jump on in guys, there are over 100 Heroes in Dota2 and they aren't all writing their own code!  I'm open to any discussion on overall dev direction, individual bot code, builds, wants/wishes but right now I'm only one guy.  Anyone that wants to help is appreciated.  There is a bot tournament or possibly set of tournaments as soon as Jan/Feb.  If you'd like to join forces let me know.
