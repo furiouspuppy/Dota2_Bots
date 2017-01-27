@@ -71,7 +71,7 @@ maxPlayerID = 11;
 function Think()
   picks = GetPicks();
     if not IsPlayerBot(0) then
-        print("player")
+        --print("player")
         hero = GetRandomHero()
         SelectHero(5, hero);
         return
@@ -115,7 +115,7 @@ end
 
 function PickHero(slot)
   local hero = GetRandomHero();
-  print("picking hero ", hero, " for slot ", slot);
+  --print("picking hero ", hero, " for slot ", slot);
   SelectHero(slot, hero);
 end
 
@@ -167,7 +167,7 @@ function GetRandomHero()
 	end
 
 	while ( selectedHeroes[hero] == true ) do
-		print("repicking because " .. hero .. " was taken.")
+		--print("repicking because " .. hero .. " was taken.")
 		hero = allBotHeroes[RandomInt(1, #allBotHeroes)];
 	end
 

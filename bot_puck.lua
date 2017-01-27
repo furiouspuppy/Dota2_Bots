@@ -1,14 +1,31 @@
 --[[local utils = require(GetScriptDirectory() .. "/util")
 local inspect = require(GetScriptDirectory() .. "/inspect")
-local teamStatus = require( "bots".."/team_status" )
+local items = require(GetScriptDirectory() .. "/ItemData" )
+local teamStatus = require( GetScriptDirectory() .."/team_status" )
+local build = "NOT IMPLEMENTED"
+if string.match(GetBot():GetUnitName(), "hero") then
+    build = require(GetScriptDirectory() .. "/builds/item_build_" .. string.gsub(GetBot():GetUnitName(), "npc_dota_hero_", ""))
+end
+if build == "NOT IMPLEMENTED" then return end
 
 function Think()
-      local test = teamStatus.GetHeroes()
-      if GetGameState() == GAME_STATE_GAME_IN_PROGRESS or
-            GetGameState() == GAME_STATE_PRE_GAME
-      then 
-            teamStatus.UpdateTeamStatus(GetBot())
-      end
+      print("Dota: " .. DotaTime())
+      print("Game: " .. GameTime())
+      --utils.print_r(GetBasicItems(items["item_mekansm"]))
+      --GetBasicItems(items["item_mekansm"])
+      --for i,v in pairs(GetBasicItems(build.items)) do
+      --      print(i .. ":" .. v)
+      --end
+      --local test = GetBot():FindAoELocation( false, false, GetBot():GetLocation(), 200, 1000, 0.0, 10000 ) 
+
+      --print(assert(inspect.inspect(test)))
+      --print(tostring(test.targetloc))
+end
+  --if GetGameState() == GAME_STATE_GAME_IN_PROGRESS or
+      --      GetGameState() == GAME_STATE_PRE_GAME
+      --then 
+      --      teamStatus.UpdateTeamStatus(GetBot())
+      --end
       --print("!" .. tostring(teamStatus.GetHeroes()))
       --utils.print_r(teamStatus.GetHeroes())
 
@@ -19,7 +36,7 @@ function Think()
       --print(tostring(teamStatus.GetHeroes()[6]))
       --print(assert(inspect.inspect(teamStatus.GetHeroes()[6], { depth = 2 })))
 
-      print("____________________________________")
+      --[[print("____________________________________")
       for _,v in pairs(test) do
             print("")
             print(v:GetUnitName())
@@ -35,10 +52,10 @@ function Think()
             print(enemies)
             --print(assert(inspect.inspect(v.NearbyFriends)))
       end
-      print("")
+      print("")]]
       --print(tostring(test[0]))
       --print(assert(inspect.inspect(test)))
-end
+
       --print("DTop:"..utils.GetLane( Vector(-5000,5310,0)))
       --print("RTop:"..utils.GetLane( Vector(-4510,4500,0)))
       --print("RBot:"..utils.GetLane( Vector(5100,-5110,0)))

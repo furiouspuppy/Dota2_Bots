@@ -3,40 +3,21 @@ X = {}
 brown boots / power treads at any time he will think he 
 is a clone and skill/item decisions will possilby break! ]]
 X["items"] = {
---"item_tango",
---"item_tango",
---"item_quelling_blade", -- iron talon
---"item_ring_of_protection", -- iron talon
-"item_slippers", -- poor mans shield
-"item_slippers", -- poor mans shield
-"item_stout_shield", -- poor mans shield
---"item_recipe_iron_talon", -- iron talon
---"item_boots", -- power treads
---"item_gloves",-- power treads
---"item_belt_of_strength",-- power treads
-"item_boots", -- BOTs
-"item_boots_of_elves",-- dragon lance
-"item_boots_of_elves",-- dragon lance
-"item_ogre_axe", -- dragon lance
-"item_recipe_travel_boots", -- BOTs
-"item_blade_of_alacrity", -- aghs
-"item_ogre_axe",-- aghs
-"item_point_booster",-- aghs
-"item_staff_of_wizardry",-- aghs
-"item_blink",
-"item_blade_of_alacrity", -- yasha
-"item_boots_of_elves", -- yasha
-"item_recipe_yasha", -- yasha
---"item_ogre_axe",-- dragon lance
---"item_boots_of_elves",-- dragon lance
---"item_boots_of_elves",-- dragon lance
-"item_ogre_axe", -- sange
-"item_belt_of_strength",-- sange
-"item_recipe_sange",-- sange
-"item_ring_of_regen", -- force staff
-"item_staff_of_wizardry",-- force staff
-"item_recipe_force_staff",-- force staff
-"item_recipe_hurricane_pike",
+"item_tango";
+"item_poor_mans_shield";
+"item_boots"; -- BOTs
+"item_dragon_lance";
+"item_recipe_travel_boots"; -- BOTs
+"item_blade_of_alacrity"; -- aghs
+"item_ogre_axe";-- aghs
+"item_point_booster";-- aghs
+"item_staff_of_wizardry";-- aghs
+"item_eagle"; -- eth blade
+"item_ghost"; -- eth blade
+"item_blink";
+"item_heart";
+"item_eagle"; -- eth blade
+"item_ghost"; -- eth blade
 }
 
 -- Set up Skill build

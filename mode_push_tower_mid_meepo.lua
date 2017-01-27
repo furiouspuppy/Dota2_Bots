@@ -135,7 +135,10 @@ end
 
 function Think()
 	local npcBot = GetBot()
-	if #(npcBot:GetLocation() - GetLaneFrontLocation( GetTeam(), lane, 0 )) > 1000 then
+	if  not npcBot:IsUsingAbility() and 
+			not npcBot:IsChanneling() and
+			#(npcBot:GetLocation() - GetLaneFrontLocation( GetTeam(), lane, 0 )) > 1000 
+	then
 		npcBot:Action_MoveToLocation(GetLaneFrontLocation( GetTeam(), lane, 0 ))
 	else
 		if not npcBot:IsUsingAbility() and 

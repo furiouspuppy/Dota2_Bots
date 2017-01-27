@@ -1,4 +1,5 @@
 local utils = require(GetScriptDirectory() .. "/util")
+local items = require(GetScriptDirectory() .. "/ItemData" )
 local build ="NOT IMPLEMENTED"
 if string.match(GetBot():GetUnitName(), "hero") then
     build = require(GetScriptDirectory() .. "/builds/item_build_" .. string.gsub(GetBot():GetUnitName(), "npc_dota_hero_", ""))
@@ -14,8 +15,9 @@ To build an derived item like item_magic_wand you will just
 buy the four base items so take care to get items in your 
 inventory in the correct order! ]]
 
-local tableItemsToBuy = build["items"]
-
+local tableItemsToBuy = {}
+local tpTimer = 0
+local wardTimer = 0
 
 ----------------------------------------------------------------------------------------------------
 
@@ -52,6 +54,11 @@ end
 
 -- Think function to purchase the items and call the skill point think
 function ItemPurchaseThink()
+    if GetGameState() ~= GAME_STATE_GAME_IN_PROGRESS and
+        GetGameState() ~= GAME_STATE_PRE_GAME
+    then 
+        return
+    end
     local npcBot = GetBot();
     
     -- check if real meepo
@@ -76,9 +83,46 @@ function ItemPurchaseThink()
 
     --print(npcBot:GetUnitName())
 	local currentItems = {}
-	for i=0, 8 do
+	for i=0, 5 do
 		currentItems[i] = npcBot:GetItemInSlot(i)
 	end
+    local hasTP = false
+    for _,v in pairs(currentItems) do
+        if v:GetName() == "item_tpscroll" or 
+            v:GetName() == "item_recipe_travel_boots" or
+            v:GetName() == "item_recipe_travel_boots_2"
+        then
+            hasTP = true
+        end
+    end
+    if not hasTP and DotaTime() > tpTimer + 5 and 
+        (npcBot:DistanceFromFountain() == 0 or
+            npcBot:DistanceFromSideShop() == 0) and
+            npcBot:GetGold() > 50 
+    then
+        tpTimer = DotaTime()
+        npcBot:Action_PurchaseItem( "item_tpscroll" )
+    end
+    if DotaTime() < -80 + 10 - utils.Roles[npcBot:GetUnitName()] then
+        if GetItemStockCount( "item_courier" ) > 0 then
+            npcBot:Action_PurchaseItem( "item_courier" )
+        end
+    end
+
+    if utils.Roles[npcBot:GetUnitName()] > 2 then
+        if GetItemStockCount( "item_ward_observer" ) > 0 and wardTimer == 0 then
+            wardTimer = DotaTime() + 25 - (5 * utils.Roles[npcBot:GetUnitName()])
+            print(npcBot:GetUnitName() .. wardTimer)
+        end
+        if wardTimer ~= 0 and wardTimer < DotaTime() then
+            print(npcBot:GetUnitName())
+            if GetItemStockCount( "item_ward_observer" ) > 0 then
+                npcBot:Action_PurchaseItem( "item_ward_observer" )
+            end
+            wardTimer = 0
+        end
+    end
+
 
 	if ( #tableItemsToBuy == 0 )
 	then
@@ -97,7 +141,6 @@ function ItemPurchaseThink()
             -- this item is from secret shop
             npcBot.secretShopMode = true;
             --print("secretshopmode:"..tostring(npcBot.secretShopMode))
-
         end
         if npcBot.secretShopMode and  npcBot:DistanceFromSecretShop() > 00  then
             return
@@ -115,12 +158,28 @@ end
 
 ----------------------------------------------------------------------------------------------------
 
+local function GetBasicItems( ... )
+    local basicItemTable = {}
+    for i,v in pairs(...) do
+        if items[v] ~= nil then
+            for _,w in pairs(GetBasicItems(items[v])) do
+                table.insert(basicItemTable, w)
+            end
+        else
+            table.insert(basicItemTable, v)
+        end
+    end
+    return basicItemTable
+end
+----------------------------------------------------------------------------------------------------
+
+
 --[[this chunk prevents dota_bot_reload_scripts from breaking your 
 	item/skill builds.  Note the script doesn't account for 
 	consumables. ]]
 
 local npcBot = GetBot();
-
+tableItemsToBuy = GetBasicItems(build["items"])
 -- check skill build vs current level
 local ability_name = BotAbilityPriority[1];
 local ability = GetBot():GetAbilityByName(ability_name);
@@ -140,117 +199,12 @@ local currentItems = {}
 for i=0, 15 do
     if(npcBot:GetItemInSlot(i) ~= nil) then
         local _item = npcBot:GetItemInSlot(i):GetName()
-        if(_item == "item_magic_wand")then
-            table.insert(currentItems, "item_magic_stick")
-            table.insert(currentItems, "item_branches")
-            table.insert(currentItems, "item_branches")
-            table.insert(currentItems, "item_circlet")
-        elseif(_item == "item_arcane_boots")then
-            table.insert(currentItems, "item_energy_booster")
-            table.insert(currentItems, "item_boots")
-        elseif(_item == "item_power_treads")then
-            table.insert(currentItems, "item_boots")
-            table.insert(currentItems, "item_gloves")
-            table.insert(currentItems, "item_belt_of_strength")
-        elseif(_item == "item_travel_boots")then
-            table.insert(currentItems, "item_boots")
-            table.insert(currentItems, "item_recipe_travel_boots")
-        elseif(_item == "item_travel_boots_2")then
-            table.insert(currentItems, "item_boots")
-            table.insert(currentItems, "item_recipe_travel_boots")
-            table.insert(currentItems, "item_recipe_travel_boots_2")
-        elseif(_item == "item_null_talisman")then
-            table.insert(currentItems, "item_circlet")
-            table.insert(currentItems, "item_mantle")
-            table.insert(currentItems, "item_recipe_null_talisman")
-        elseif(_item == "item_iron_talon")then
-            table.insert(currentItems, "item_quelling_blade")
-            table.insert(currentItems, "item_ring_of_protection")
-            table.insert(currentItems, "item_recipe_iron_talon")
-        elseif(_item == "item_poor_mans_shield")then
-            table.insert(currentItems, "item_slippers")
-            table.insert(currentItems, "item_slippers")
-            table.insert(currentItems, "item_stout_shield")
-        elseif(_item == "item_ultimate_scepter")then
-            table.insert(currentItems, "item_point_booster")
-            table.insert(currentItems, "item_staff_of_wizardry")
-            table.insert(currentItems, "item_ogre_axe")
-            table.insert(currentItems, "item_blade_of_alacrity")
-        elseif(_item == "item_force_staff")then
-            table.insert(currentItems, "item_ring_of_regen")
-            table.insert(currentItems, "item_staff_of_wizardry")
-            table.insert(currentItems, "item_recipe_force_staff")
-        elseif(_item == "item_dragon_lance")then
-            table.insert(currentItems, "item_ogre_axe")
-            table.insert(currentItems, "item_boots_of_elves")
-            table.insert(currentItems, "item_boots_of_elves")
-        elseif(_item == "item_hurricane_pike")then
-            table.insert(currentItems, "item_ring_of_regen")
-            table.insert(currentItems, "item_staff_of_wizardry")
-            table.insert(currentItems, "item_recipe_force_staff")
-            table.insert(currentItems, "item_ogre_axe")
-            table.insert(currentItems, "item_boots_of_elves")
-            table.insert(currentItems, "item_boots_of_elves")
-            table.insert(currentItems, "item_recipe_hurricane_pike")
-        elseif(_item == "item_sange")then
-            table.insert(currentItems, "item_ogre_axe")
-            table.insert(currentItems, "item_belt_of_strength")
-            table.insert(currentItems, "item_recipe_sange")
-        elseif(_item == "item_yasha")then
-            table.insert(currentItems, "item_blade_of_alacrity")
-            table.insert(currentItems, "item_boots_of_elves")
-            table.insert(currentItems, "item_recipe_yasha")
-        elseif(_item == "item_sange_and_yasha")then
-            table.insert(currentItems, "item_ogre_axe")
-            table.insert(currentItems, "item_belt_of_strength")
-            table.insert(currentItems, "item_recipe_sange")
-            table.insert(currentItems, "item_blade_of_alacrity")
-            table.insert(currentItems, "item_boots_of_elves")
-            table.insert(currentItems, "item_recipe_yasha")
-        elseif(_item == "item_manta")then
-            table.insert(currentItems, "item_blade_of_alacrity")
-            table.insert(currentItems, "item_boots_of_elves")
-            table.insert(currentItems, "item_recipe_yasha")
-            table.insert(currentItems, "item_ultimate_orb")
-            table.insert(currentItems, "item_recipe_manta")
-        elseif(_item == "item_hood_of_defiance")then
-            table.insert(currentItems, "item_ring_of_health")
-            table.insert(currentItems, "item_cloak")
-            table.insert(currentItems, "item_ring_of_regen")
-        elseif(_item == "item_phase_boots")then
-            table.insert(currentItems, "item_boots")
-            table.insert(currentItems, "item_blades_of_attack")
-            table.insert(currentItems, "item_blades_of_attack")
-        elseif(_item == "item_vanguard")then
-            table.insert(currentItems, "item_stout_shield")
-            table.insert(currentItems, "item_ring_of_health")
-            table.insert(currentItems, "item_vitality_booster")
-        elseif(_item == "item_invis_sword")then --shadowblade
-            table.insert(currentItems, "item_shadow_amulet")
-            table.insert(currentItems, "item_claymore")
-        elseif(_item == "item_silver_edge")then --shadowblade
-            table.insert(currentItems, "item_shadow_amulet")
-            table.insert(currentItems, "item_claymore")
-            table.insert(currentItems, "item_ultimate_orb")
-            table.insert(currentItems, "item_recipe_silver_edge")
-        elseif(_item == "item_echo_sabre")then --shadowblade
-            table.insert(currentItems, "item_quarterstaff")
-            table.insert(currentItems, "item_sobi_mask")
-            table.insert(currentItems, "item_robe")
-        elseif(_item == "item_basher")then --shadowblade
-            table.insert(currentItems, "item_belt_of_strength")
-            table.insert(currentItems, "item_javelin")
-            table.insert(currentItems, "item_recipe_basher")
-        elseif(_item == "item_abyssal_blade")then --shadowblade
-            table.insert(currentItems, "item_stout_shield")
-            table.insert(currentItems, "item_ring_of_health")
-            table.insert(currentItems, "item_vitality_booster")
-            table.insert(currentItems, "item_belt_of_strength")
-            table.insert(currentItems, "item_javelin")
-            table.insert(currentItems, "item_recipe_basher")
-            table.insert(currentItems, "item_recipe_abyssal_blade")
+        if items[_item] == nil then
+            table.insert(currentItems, _item)
         else
-            table.insert(currentItems, npcBot:GetItemInSlot(i):GetName())
+            for _,v in pairs(GetBasicItems(items[_item])) do
+                table.insert(currentItems, v)
+            end
         end
     end
 end

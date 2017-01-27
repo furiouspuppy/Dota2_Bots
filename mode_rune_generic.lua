@@ -185,12 +185,18 @@ function Think()
     end
 
 
-    if GameTime() < 200 then
+    if GameTime() < 200 and 
+		not npcBot:IsChanneling() and
+		not npcBot:IsUsingAbility() 
+	then
     	npcBot:Action_MoveToLocation( npcBot:GetNearest( utils.tableRuneSpawns[GetTeam()]))
 		return
     end
 
-    if rune ~= nil and rune ~= 0 then
+    if rune ~= nil and rune ~= 0 and 
+		not npcBot:IsChanneling() and
+		not npcBot:IsUsingAbility()
+	then
 	   	npcBot:Action_MoveToLocation( rune )
 	else
 		print("rune error!")

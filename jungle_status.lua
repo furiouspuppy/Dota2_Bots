@@ -14,6 +14,7 @@ function X.NewJungle ()
 	end
 end
 
+
 ----------------------------------------------------------------------------------------------------
 
 --get currently known alive / unknown camps
