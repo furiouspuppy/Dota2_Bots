@@ -1,5 +1,5 @@
 local utils = require(GetScriptDirectory() .. "/util")
-local teamStatus = require( "bots".."/team_status" )
+local teamStatus = require(GetScriptDirectory() .. "/team_status" )
 ----------------------------------------------------------------------------------------------------
 local X = {}
 

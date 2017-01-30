@@ -1,6 +1,6 @@
 local utils = require(GetScriptDirectory() .. "/util")
 local meepoStatus = require(GetScriptDirectory() .."/meepo_status" )
-local teamStatus = require( "bots".."/team_status" )
+local teamStatus = require(GetScriptDirectory() .. "/team_status" )
 local items = require(GetScriptDirectory() .. "/ItemData" )
 local build = require(GetScriptDirectory() .. "/builds/item_build_meepo")
 ----------------------------------------------------------------------------------------------------

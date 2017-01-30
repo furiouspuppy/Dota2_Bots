@@ -22,14 +22,14 @@ local SKILL_W = "chaos_knight_reality_rift";
 local SKILL_E = "chaos_knight_chaos_strike";
 local SKILL_R = "chaos_knight_phantasm";    
 
-local ABILITY1 = "ial_bonus_attack_speed_15"
-local ABILITY2 = "ial_bonus_intelligence_7"
-local ABILITY3 = "ial_bonus_movement_speed_15"
-local ABILITY4 = "ial_bonus_strength_10"
-local ABILITY5 = "ial_bonus_gold_income_20"
-local ABILITY6 = "ial_bonus_all_stats_12"
-local ABILITY7 = "ial_bonus_cooldown_reduction_20"
-local ABILITY8 = "ial_bonus_unique_chaos_knight"
+local ABILITY1 = "special_bonus_attack_speed_15"
+local ABILITY2 = "special_bonus_intelligence_7"
+local ABILITY3 = "special_bonus_movement_speed_15"
+local ABILITY4 = "special_bonus_strength_10"
+local ABILITY5 = "special_bonus_gold_income_20"
+local ABILITY6 = "special_bonus_all_stats_12"
+local ABILITY7 = "special_bonus_cooldown_reduction_20"
+local ABILITY8 = "special_bonus_unique_chaos_knight"
 
 --use -1 for levels that shouldn't level a skill
 X["skills"] = {

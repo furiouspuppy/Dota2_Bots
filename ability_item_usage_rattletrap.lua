@@ -1,50 +1,65 @@
 local utils = require(GetScriptDirectory() .. "/util")
 local enemyStatus = require(GetScriptDirectory() .."/enemy_status" )
-
 local inspect = require(GetScriptDirectory() .. "/inspect")
-----------------------------------------------------------------------------------------------------
-local courierTime = 0
 
---[[function CourierUsageThink()
-	local npcBot = GetBot()
-
-	if (IsCourierAvailable() and
-		npcBot:DistanceFromFountain() < 9000 and 
-		DotaTime() > (courierTime + 5) and
-		(npcBot:GetCourierValue( ) > 0 or
-		npcBot:GetStashValue( ) > 0) and
-		npcBot:GetActiveMode() ~= BOT_MODE_ATTACK and
-		npcBot:GetActiveMode() ~= BOT_MODE_RETREAT and
-		npcBot:GetActiveMode() ~= BOT_MODE_EVASIVE_MANEUVERS and
-		npcBot:GetActiveMode() ~= BOT_MODE_DEFEND_ALLY)
-	then
-		npcBot:Action_CourierDeliver( )
-		courierTime = DotaTime()
-	end
-end]]
+local items = require(GetScriptDirectory() .. "/ItemData" )
+local build ="NOT IMPLEMENTED"
+if string.match(GetBot():GetUnitName(), "hero") then
+    build = require(GetScriptDirectory() .. "/builds/item_build_" .. string.gsub(GetBot():GetUnitName(), "npc_dota_hero_", ""))
+end
+if build == "NOT IMPLEMENTED" then return end
 ----------------------------------------------------------------------------------------------------
+
 --rattletrap_battery_assault
 --rattletrap_hookshot
 --rattletrap_power_cogs
 --rattletrap_rocket_flare
 
---[[
-	local us = GetTeamPlayers( GetTeam() )
-	local them
-	if math.abs(GetTeam() - 3) then
-		them = GetTeamPlayers( 3 )
-	else
-		them = GetTeamPlayers( 2 )
-	end
-	local test = {}
-	for _,v in pairs(them) do
-		table.insert(test, GetSelectedHeroName( v ))
-	end
-	print(assert(inspect.inspect(test)))
+----------------------------------------------------------------------------------------------------
 
-	local test = GetBot():GetNearbyHeroes( 35000, true, BOT_MODE_NONE )
-	print(assert(inspect.inspect(test)))
-	]]
+--[[ Set up your skill build. ]]
+local BotAbilityPriority = build["skills"]
+
+-- Think function for spending skill points
+function AbilityLevelUpThink()    
+    --print(GetBot():GetUnitName())
+    if GetGameState() ~= GAME_STATE_GAME_IN_PROGRESS and
+        GetGameState() ~= GAME_STATE_PRE_GAME
+    then 
+        return
+    end
+    local npcBot = GetBot()
+    -- Do I have a skill point?
+    --print (npcBot:GetUnitName() .. npcBot:GetAbilityPoints())
+    if (npcBot:GetAbilityPoints() > 0) then  
+        local ability_name = BotAbilityPriority[1];
+        --print(ability_name)
+        -- Can I slot a skill with this skill point?
+        if(ability_name ~="-1")
+        then
+            local ability = GetBot():GetAbilityByName(ability_name);
+            -- Check if its a legit upgrade
+            --print(npcBot:GetUnitName() .. ":" .. tostring(ability:CanAbilityBeUpgraded())..":".. ability:GetLevel() .. "<" .. ability:GetMaxLevel())
+            if( ability:CanAbilityBeUpgraded() and ability:GetLevel() < ability:GetMaxLevel())  
+            then
+                local currentLevel = ability:GetLevel();
+                GetBot():Action_LevelAbility(BotAbilityPriority[1]);
+                if ability:GetLevel() > currentLevel then
+                    --print("Skill: "..ability_name.."  upgraded!");
+                    table.remove(BotAbilityPriority,1)
+                else
+                    --print("Skill: "..ability_name.." upgrade failed?!?");
+                    end
+            end 
+        else
+            table.remove(BotAbilityPriority,1)
+        end
+	end
+end
+
+
+----------------------------------------------------------------------------------------------------
+
 local castbaDesire = 0;
 local castcogsDesire = 0;
 local casthookDesire = 0;
@@ -242,9 +257,9 @@ function ConsiderHook()
 	local npcBot = GetBot();
 
 	-- Make sure it's castable
-	if ( not abilityHook:IsFullyCastable() ) then 
+	--[[if ( not abilityHook:IsFullyCastable() ) then 
 		return BOT_ACTION_DESIRE_NONE, 0;
-	end
+	end]]
 
 
 	-- If we want to cast priorities at all, bail
@@ -259,11 +274,15 @@ function ConsiderHook()
 
 	-- Get enemies
 	local tableNearbyEnemyHeroes = npcBot:GetNearbyHeroes( 1300, true, BOT_MODE_NONE );
-
-	-- cancel channeling (TODO when is this a good idea?)
+	for _,v in pairs(tableNearbyEnemyHeroes) do
+		print(v:GetUnitName())
+		print(tostring(npcBot:IsSkillPathClear( v:GetXUnitsInFront(75), 125, true)))
+		--npcBot:IsSkillPathClear( v:GetLocation(), nRadius, true)
+	end
+	--[[ cancel channeling (TODO when is this a good idea?)
 	for _,npcTarget in pairs( tableNearbyEnemyHeroes )
 	do
-		if ( npcTarget:IsChanneling() and utils.isSkillPathClearOfUnits( npcBot, npcTarget:GetLocation(), nRadius) ) 
+		if ( npcTarget:IsChanneling() and npcBot.IsSkillPathClear( npcTarget:GetLocation(), nRadius, true) ) 
 		then
 			if ( CanCastHookOnTarget( npcTarget ) ) 
 			then
@@ -278,12 +297,12 @@ function ConsiderHook()
 	for _,v in pairs(tableNearbyEnemyHeroes) do
 		local tower = tableNearbyFriendlyTowers[1];	
 		if tower ~= nil then
-			if ( GetUnitToUnitDistance( v, tower ) < 700 and utils.isSkillPathClearOfUnits( npcBot, v:GetLocation(), nRadius) ) 
+			if ( GetUnitToUnitDistance( v, tower ) < 700 and npcBot.IsSkillPathClear( npcTarget:GetLocation(), nRadius, true) ) 
 			then
 				return BOT_ACTION_DESIRE_MODERATE, v:GetLocation();
 			end
 		end
-	end
+	end]]
 	
 	return BOT_ACTION_DESIRE_NONE, 0;
 

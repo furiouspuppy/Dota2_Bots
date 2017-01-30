@@ -36,7 +36,7 @@ X["skills"] = {
     SKILL_R,    SKILL_E,    SKILL_Q,    SKILL_Q,    ABILITY2,--"special_bonus_intelligence_8",
     SKILL_W,    SKILL_W,    SKILL_E,    SKILL_E,    ABILITY3,--"special_bonus_attack_damage_40",
     SKILL_R,    "-1",       SKILL_R,    "-1",   	ABILITY5,--"special_bonus_spell_amplify_8",
-    "-1",   	ABILITY7,   "-1",       "-1",       "-1",--"special_bonus_gold_income_50"
+    "-1",   	"-1",   	"-1",       "-1",       ABILITY7,--"special_bonus_gold_income_50"
 };
 
 return X

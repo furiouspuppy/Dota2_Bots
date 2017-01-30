@@ -73,6 +73,11 @@ function ItemPurchaseThink()
             npcBot:Action_PurchaseItem( "item_courier" )
         end
     end
+    if DotaTime() > 180 + 25 - (5 * utils.Roles[npcBot:GetUnitName()]) and DotaTime() < 360 then
+        if GetItemStockCount( "item_flying_courier" ) > 0 then
+            npcBot:Action_PurchaseItem( "item_flying_courier" )
+        end
+    end
 
     if utils.Roles[npcBot:GetUnitName()] > 2 then
         if GetItemStockCount( "item_ward_observer" ) > 0 and wardTimer == 0 then

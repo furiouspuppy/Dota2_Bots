@@ -2,74 +2,76 @@
 
 ItemModule = {}
 
-ItemModule["basic_items"] = {    "item_aegis";
-                        "item_courier";
-                        "item_boots_of_elves";
-                        "item_belt_of_strength";
-                        "item_blade_of_alacrity";
-                        "item_blades_of_attack";
-                        "item_blight_stone";
-                        "item_blink";
-                        "item_boots";
-                        "item_bottle";
-                        "item_broadsword";
-                        "item_chainmail";
-                        "item_cheese";
-                        "item_circlet";
-                        "item_clarity";
-                        "item_claymore";
-                        "item_cloak";
-                        "item_demon_edge";
-                        "item_dust";
-                        "item_eagle";
-                        "item_enchanted_mango";
-                        "item_energy_booster";
-                        "item_faerie_fire";
-                        "item_flying_courier";
-                        "item_gauntlets";
-                        "item_gem";
-                        "item_ghost";
-                        "item_gloves";
-                        "item_flask";
-                        "item_helm_of_iron_will";
-                        "item_hyperstone";
-                        "item_infused_raindrop";
-                        "item_branches";
-                        "item_javelin";
-                        "item_magic_stick";
-                        "item_mantle";
-                        "item_mithril_hammer";
-                        "item_lifesteal";
-                        "item_mystic_staff";
-                        "item_ward_observer";
-                        "item_ogre_axe";
-                        "item_orb_of_venom";
-                        "item_platemail";
-                        "item_point_booster";
-                        "item_quarterstaff";
-                        "item_quelling_blade";
-                        "item_reaver";
-                        "item_ring_of_health";
-                        "item_ring_of_protection";
-                        "item_ring_of_regen";
-                        "item_robe";
-                        "item_relic";
-                        "item_sobi_mask";
-                        "item_ward_sentry";
-                        "item_shadow_amulet";
-                        "item_slippers";
-                        "item_smoke_of_deceit";
-                        "item_staff_of_wizardry";
-                        "item_stout_shield";
-                        "item_talisman_of_evasion";
-                        "item_tango";
-                        "item_tango_single";
-                        "item_tome_of_knowledge";
-                        "item_tpscroll";
-                        "item_ultimate_orb";
-                        "item_vitality_booster";
-                        "item_void_stone";
-                        "item_wind_lace"    }
+ItemModule["basic_items"] = {    
+	"item_aegis";
+	"item_courier";
+	"item_boots_of_elves";
+	"item_belt_of_strength";
+	"item_blade_of_alacrity";
+	"item_blades_of_attack";
+	"item_blight_stone";
+	"item_blink";
+	"item_boots";
+	"item_bottle";
+	"item_broadsword";
+	"item_chainmail";
+	"item_cheese";
+	"item_circlet";
+	"item_clarity";
+	"item_claymore";
+	"item_cloak";
+	"item_demon_edge";
+	"item_dust";
+	"item_eagle";
+	"item_enchanted_mango";
+	"item_energy_booster";
+	"item_faerie_fire";
+	"item_flying_courier";
+	"item_gauntlets";
+	"item_gem";
+	"item_ghost";
+	"item_gloves";
+	"item_flask";
+	"item_helm_of_iron_will";
+	"item_hyperstone";
+	"item_infused_raindrop";
+	"item_branches";
+	"item_javelin";
+	"item_magic_stick";
+	"item_mantle";
+	"item_mithril_hammer";
+	"item_lifesteal";
+	"item_mystic_staff";
+	"item_ward_observer";
+	"item_ogre_axe";
+	"item_orb_of_venom";
+	"item_platemail";
+	"item_point_booster";
+	"item_quarterstaff";
+	"item_quelling_blade";
+	"item_reaver";
+	"item_ring_of_health";
+	"item_ring_of_protection";
+	"item_ring_of_regen";
+	"item_robe";
+	"item_relic";
+	"item_sobi_mask";
+	"item_ward_sentry";
+	"item_shadow_amulet";
+	"item_slippers";
+	"item_smoke_of_deceit";
+	"item_staff_of_wizardry";
+	"item_stout_shield";
+	"item_talisman_of_evasion";
+	"item_tango";
+	"item_tango_single";
+	"item_tome_of_knowledge";
+	"item_tpscroll";
+	"item_ultimate_orb";
+	"item_vitality_booster";
+	"item_void_stone";
+	"item_wind_lace"    
+}
 
 ItemModule["item_abyssal_blade"] = { "item_basher"; "item_vanguard"; "item_recipe_abyssal_blade" }
 
@@ -186,7 +188,7 @@ ItemModule["item_necronomicon_1"] = { "item_staff_of_wizardry"; "item_belt_of_st
 ItemModule["item_necronomicon_2"] = { "item_staff_of_wizardry"; "item_belt_of_strength"; "item_recipe_necronomicon"; "item_recipe_necronomicon" }
 
 ItemModule["item_necronomicon_3"] = { "item_staff_of_wizardry"; "item_belt_of_strength"; "item_recipe_necronomicon"; "item_recipe_necronomicon"; "item_recipe_necronomicon" }
-            
+	    
 ItemModule["item_null_talisman"] = { "item_mantle"; "item_circlet"; "item_recipe_null_talisman" }
 
 ItemModule["item_oblivion_staff"] = { "item_quarterstaff"; "item_robe"; "item_sobi_mask" }
@@ -216,15 +218,15 @@ ItemModule["item_radiance"] = { "item_relic"; "item_recipe_radiance" }
 ItemModule["item_rapier"] = { "item_demon_edge"; "item_relic" }
 
 ItemModule["item_refresher"] = { "item_pers"; "item_pers"; "item_recipe_refresher" }
-                                
+				
 ItemModule["item_ring_of_aquila"] = { "item_ring_of_basilius"; "item_wraith_band" }
-                            
+			    
 ItemModule["item_ring_of_basilius"] = {  "item_ring_of_protection"; "item_sobi_mask" }
-                                
+				
 ItemModule["item_rod_of_atos"] = { "item_vitality_booster"; "item_staff_of_wizardry"; "item_staff_of_wizardry" }
 
 ItemModule["item_sange"] = { "item_belt_of_strength"; "item_ogre_axe"; "item_recipe_sange" }
-                            
+			    
 ItemModule["item_sange_and_yasha"] = { "item_sange"; "item_yasha" }
 
 ItemModule["item_satanic"] = { "item_lifesteal"; "item_reaver"; "item_mithril_hammer" }

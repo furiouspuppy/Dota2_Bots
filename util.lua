@@ -94,7 +94,66 @@ function CDOTA_Bot_Script:GetLane()
 end
 
 ----------------------------------------------------------------------------------------------------
+--check if a path from nloc1 to nloc2 that is nWidth wide is clear of units
+function CDOTA_Bot_Script:IsSkillPathClear( vTargetLoc, nWidth, bFriends)
+    local heroWidth = 24 --this isn't true for lycan/naga/pl who are 8
+    local dist = heroWidth + nWidth + 1
+    local pointcount = math.floor(GetUnitToLocationDistance(self, vTargetLoc) / nWidth - 2)
+    print(pointcount)
+    local pointlist = {}
+    local currentPoint = GetBot():GetXUnitsTowardsLocation( vTargetLoc, dist )
 
+    for i=0,pointcount do
+        --[[
+        for _,v in pairs(pointlist) do
+            DebugDrawCircle( v, nWidth, 0, 255, 50 )
+            DebugDrawCircle( self:GetLocation(), nWidth, 0, 50, 255 )
+            DebugDrawCircle( vTargetLoc, nWidth, 255, 50, 50 )
+        end
+        ]]
+
+        table.insert(pointlist, currentPoint)
+        --print("added point")
+        dist = dist + nWidth
+        currentPoint = GetBot():GetXUnitsTowardsLocation( vTargetLoc, dist )
+        --print(GetUnitToLocationDistance(self, currentPoint))
+    end
+
+ 
+    for _,v in pairs(pointlist) do
+        DebugDrawCircle( v, nWidth, 0, 255, 50 )
+        DebugDrawCircle( self:GetLocation(), nWidth, 0, 50, 255 )
+        DebugDrawCircle( vTargetLoc, nWidth, 255, 50, 50 )
+    end
+
+   for _,v in pairs(pointlist) do
+        --print("checking point")
+        --DebugDrawCircle( v, nWidth, 0, 255, 50 )
+        --DebugDrawCircle( self:GetLocation(), nWidth, 0, 50, 255 )
+        --DebugDrawCircle( vTargetLoc, nWidth, 255, 50, 50 )
+        local enemyHeroes = self:FindAoELocation( true, true, v, 0, nWidth, 0.0, 100000 ) 
+        local enemyCreeps = self:FindAoELocation( true, false, v, 0, nWidth, 0.0, 100000 ) 
+        local friendlyHeroes = self:FindAoELocation( false, true, v, 0, nWidth, 0.0, 100000 ) 
+        local friendlyCreeps = self:FindAoELocation( false, false, v, 0, nWidth, 0.0, 100000 ) 
+        if not bFriends then
+            friendlyHeroes = 0
+            friendlyCreeps = 0
+        end
+        if (enemyHeroes.count > 0 or
+            enemyCreeps.count > 0 or
+            friendlyHeroes.count > 0 or
+             friendlyCreeps.count > 0)
+        then
+            --print("path blocked")
+            return false
+        end
+    end
+    --print("Path Clear!")
+    return true
+end
+
+----------------------------------------------------------------------------------------------------
+ 
 -- util function for printing a table
 function utilsModule.print_r(t)--print_r ( t )  
     local print_r_cache={}
