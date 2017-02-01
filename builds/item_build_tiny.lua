@@ -7,7 +7,7 @@ X["items"] = {
 "item_power_treads";
 "item_magic_wand";
 "item_blink"; 
-"item_echo_saber";
+"item_echo_sabre";
 "item_ultimate_scepter";
 "item_black_king_bar";
 "item_moon_shard";

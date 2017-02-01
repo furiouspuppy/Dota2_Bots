@@ -80,8 +80,8 @@ end
 ----------------------------------------------------------------------------------------------------
 
 function AbilityUsageThink()
-local npcBot = GetBot();
-local sideOfMap = 0
+	local npcBot = GetBot();
+	local sideOfMap = 0
 	--print(utils.GetLocationDanger(npcBot:GetLocation()))
 	-- Check if we're already using an ability
 	if ( npcBot:IsUsingAbility() ) then return end;

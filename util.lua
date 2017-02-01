@@ -8,6 +8,7 @@ utilsModule["tableRuneSpawns"] = vec.tableRuneSpawns
 utilsModule.Roles = BotData.Roles
 ----------------------------------------------------------------------------------------------------
 
+CDOTA_Bot_Script.TaskList = {}
 CDOTA_Bot_Script.secretShopMode = false
 CDOTA_Bot_Script.AttackPower = 0
 CDOTA_Bot_Script.MagicPower = 0

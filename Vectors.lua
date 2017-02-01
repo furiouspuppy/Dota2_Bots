@@ -1,4 +1,4 @@
-X = {}
+local Vectors = {}
 
 ------------------------------
 -- Other Constants/Enums etc.
@@ -146,7 +146,7 @@ PRE_STACK_VECTOR = "prestack"
 STACK_VECTOR = "stack"
 DIFFICULTY = "difficulty"
 
-X["tableNeutralCamps"] = {
+Vectors["tableNeutralCamps"] = {
 	[TEAM_RADIANT] = {
 		[1] = {
 			[DIFFICULTY] = CAMP_EASY,
@@ -283,7 +283,7 @@ X["tableNeutralCamps"] = {
 
 POWERUP_RUNES = 1
 
-X["tableRuneSpawns"] = {
+Vectors["tableRuneSpawns"] = {
 	[TEAM_RADIANT] = {
 		RAD_BOUNTY_RUNE_SAFE;
 		RAD_BOUNTY_RUNE_OFF;
@@ -300,7 +300,7 @@ X["tableRuneSpawns"] = {
 
 ----------------------------------------------------------------------------------------------------
 
-X["tableWardSpots"] = {
+Vectors["tableWardSpots"] = {
 	[TEAM_RADIANT] = {
 		RAD_POWER_TOP;
 		RAD_POWER_BOT;
@@ -313,4 +313,4 @@ X["tableWardSpots"] = {
 
 ----------------------------------------------------------------------------------------------------
 
-return X
+return Vectors
