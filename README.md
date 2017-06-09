@@ -1,4 +1,4 @@
-##My Dota2 Bots
+##My Dota2 Bots... Are on hold until further notice.  I will be back, but as this API and the game itself updates rapidly, consider this code non-functional until further notice.  Sorry :(
 
 With 7.00 came a long awaited supported AI for writing our own bots, I play a LOT of bot games with friends so I couldn't resist taking a crack at it.  Gives me an excuse to learn LUA as well.
 
